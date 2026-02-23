@@ -1,4 +1,5 @@
 import { api } from "@/lib/api/axios";
+
 import type { FetchFeedsResponse, FetchFeedsResult } from "./types";
 
 export async function fetchFeedsApi(): Promise<FetchFeedsResult> {

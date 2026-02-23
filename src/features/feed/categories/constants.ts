@@ -30,3 +30,15 @@ export function getSourceIdsForCategory(
 ): string[] {
   return sources.filter((s) => s.category === category).map((s) => s.id);
 }
+
+export const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
+  "개발자 커뮤니티": "DEVELOPER_COMMUNITY",
+  "AI 기업 블로그": "AI_COMPANY_BLOGS",
+  "한국 테크 블로그": "KOREAN_TECH_BLOGS",
+};
+
+export const CATEGORY_ICONS: Record<string, string> = {
+  "개발자 커뮤니티": "code",
+  "AI 기업 블로그": "brain",
+  "한국 테크 블로그": "globe",
+};

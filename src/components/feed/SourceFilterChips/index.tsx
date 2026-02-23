@@ -20,13 +20,13 @@ export function SourceFilterChips({
       <button
         onClick={() => onChange(null)}
         className={cn(
-          "rounded-full px-3 py-1 text-xs font-medium transition-colors",
+          "rounded-[16px] px-4 py-2 font-mono text-[11px] font-semibold uppercase transition-colors",
           activeSourceId === null
-            ? "bg-foreground text-background"
-            : "bg-muted text-muted-foreground hover:bg-accent",
+            ? "bg-orange text-text-dark"
+            : "border border-border bg-transparent text-muted-foreground hover:text-foreground",
         )}
       >
-        All
+        ALL
       </button>
       {sources.map((source) => (
         <button
@@ -35,10 +35,10 @@ export function SourceFilterChips({
             onChange(activeSourceId === source.id ? null : source.id)
           }
           className={cn(
-            "rounded-full px-3 py-1 text-xs font-medium transition-colors",
+            "rounded-[16px] px-4 py-2 font-mono text-[11px] font-semibold uppercase transition-colors",
             activeSourceId === source.id
-              ? "bg-foreground text-background"
-              : "bg-muted text-muted-foreground hover:bg-accent",
+              ? "bg-orange text-text-dark"
+              : "border border-border bg-transparent text-muted-foreground hover:text-foreground",
           )}
         >
           {source.name}

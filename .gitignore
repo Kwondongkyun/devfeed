@@ -139,3 +139,19 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 /src/generated/prisma
+
+# Claude
+.claude
+
+# TypeScript incremental build info
+*.tsbuildinfo
+
+# Next.js auto-generated types
+next-env.d.ts
+
+# Pencil design files
+*.pen
+
+# macOS
+.DS_Store
+**/.DS_Store

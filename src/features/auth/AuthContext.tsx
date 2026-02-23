@@ -8,14 +8,16 @@ import {
   useState,
   type ReactNode,
 } from "react";
+
 import { AUTH_LOGOUT_EVENT } from "@/lib/api/axios";
-import type { User } from "./types";
 import { getMeApi } from "./api";
+
+import type { User } from "./types";
 
 interface AuthContextValue {
   user: User | null;
   loading: boolean;
-  login: (accessToken: string, refreshToken: string, user: User) => void;
+  login: (accessToken: string, refreshToken: string, userData: User) => void;
   logout: () => void;
 }
 
@@ -72,10 +74,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback(
-    (accessToken: string, refreshToken: string, user: User) => {
+    (accessToken: string, refreshToken: string, userData: User) => {
       localStorage.setItem("access_token", accessToken);
       localStorage.setItem("refresh_token", refreshToken);
-      setUser(user);
+      document.cookie = `access_token=${accessToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+      setUser(userData);
     },
     [],
   );
@@ -83,6 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
+    document.cookie = "access_token=; path=/; max-age=0";
     setUser(null);
   }, []);
 

@@ -3,19 +3,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, Newspaper } from "lucide-react";
+import { ChevronLeft, Newspaper, Code, Brain, Globe, Loader } from "lucide-react";
 
 import { Header } from "@/components/common/Header";
 import { SortToggle } from "@/components/common/SortToggle";
 import { ArticleCard } from "@/components/feed/ArticleCard";
 import { ArticleCardSkeleton } from "@/components/feed/ArticleCardSkeleton";
 import { SourceFilterChips } from "@/components/feed/SourceFilterChips";
-
 import { listArticlesApi } from "@/features/feed/articles/api";
 import { listSourcesApi } from "@/features/feed/sources/api";
 import {
   slugToCategory,
   getSourceIdsForCategory,
+  CATEGORY_DISPLAY_NAMES,
+  CATEGORY_ICONS,
 } from "@/features/feed/categories/constants";
 
 import type { ArticleItem } from "@/features/feed/articles/types";
@@ -24,12 +25,18 @@ import type { SourceItem } from "@/features/feed/sources/types";
 const DEFAULT_PAGE_SIZE = 20;
 const SKELETON_COUNT = 6;
 
+const ICON_MAP: Record<string, React.ElementType> = {
+  code: Code,
+  brain: Brain,
+  globe: Globe,
+};
+
 type SortKey = "latest" | "oldest" | "unread";
 
 const SORT_OPTIONS: { key: SortKey; label: string }[] = [
-  { key: "latest", label: "최신순" },
-  { key: "oldest", label: "오래된순" },
-  { key: "unread", label: "안 읽은 글" },
+  { key: "latest", label: "LATEST" },
+  { key: "oldest", label: "OLDEST" },
+  { key: "unread", label: "UNREAD" },
 ];
 
 export default function CategoryPage() {
@@ -67,7 +74,9 @@ export default function CategoryPage() {
   useEffect(() => {
     listSourcesApi()
       .then(setSources)
-      .catch(() => {});
+      .catch(() => {
+        // Error handled by axios interceptor
+      });
   }, []);
 
   const fetchArticles = useCallback(
@@ -163,19 +172,35 @@ export default function CategoryPage() {
     return articles;
   }, [articles, sortKey]);
 
+  const displayName = CATEGORY_DISPLAY_NAMES[category] || category;
+  const iconName = CATEGORY_ICONS[category] || "code";
+  const IconComponent = ICON_MAP[iconName] || Code;
+
   return (
     <div className="min-h-screen">
       <Header />
-      <main className="mx-auto max-w-7xl px-4 py-6">
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-8 lg:px-12">
+        <div className="mb-6 flex items-center gap-3">
+          <Link
+            href="/"
+            className="flex h-9 w-9 items-center justify-center rounded-[16px] bg-elevated text-foreground transition-colors hover:bg-placeholder"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Link>
+          <span className="font-sans text-2xl font-bold text-orange">DEVFEED</span>
+          <span className="font-mono text-sm text-muted-foreground">/</span>
+          <span className="font-sans text-lg font-semibold uppercase">{displayName}</span>
+        </div>
+
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              className="flex items-center text-gray-500 transition-colors hover:text-foreground"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </Link>
-            <h1 className="text-xl font-bold">{category}</h1>
+            <IconComponent className="h-6 w-6 text-teal" />
+            <h1 className="font-sans text-2xl font-bold uppercase tracking-wide">
+              {displayName}
+            </h1>
+            <span className="rounded-full bg-elevated px-3 py-1 font-mono text-xs text-muted-foreground">
+              {articles.length} articles
+            </span>
           </div>
           <SortToggle options={SORT_OPTIONS} value={sortKey} onChange={setSortKey} />
         </div>
@@ -189,29 +214,32 @@ export default function CategoryPage() {
         )}
 
         {initialLoading ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="flex flex-col gap-[1px] overflow-hidden rounded-[16px]">
             {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
-              <ArticleCardSkeleton key={i} />
+              <ArticleCardSkeleton key={i} layout="row" />
             ))}
           </div>
         ) : displayArticles.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
             <Newspaper className="mb-4 h-16 w-16" strokeWidth={1} />
-            <p className="text-lg font-medium">No articles found</p>
-            <p className="mt-1 text-sm">
-              Try fetching feeds first or adjust your filters.
+            <p className="font-sans text-lg font-semibold">NO_ARTICLES_FOUND</p>
+            <p className="mt-1 font-mono text-xs">
+              // try_fetching_feeds_or_adjust_filters
             </p>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="flex flex-col gap-[1px] overflow-hidden rounded-[16px]">
               {displayArticles.map((article) => (
-                <ArticleCard key={article.id} article={article} onRead={handleArticleRead} />
+                <ArticleCard key={article.id} article={article} layout="row" onRead={handleArticleRead} />
               ))}
             </div>
             <div ref={observerRef} className="flex justify-center py-8">
               {loading && (
-                <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-500" />
+                <div className="flex items-center gap-2 rounded-[16px] bg-card px-6 py-3">
+                  <Loader className="h-4 w-4 animate-spin text-muted-foreground" />
+                  <span className="font-mono text-xs text-muted-foreground">loading_more...</span>
+                </div>
               )}
             </div>
           </>

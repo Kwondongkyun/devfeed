@@ -19,16 +19,16 @@ export function SortToggle<T extends string>({
   onChange,
 }: SortToggleProps<T>) {
   return (
-    <div className="flex gap-1 rounded-lg border border-gray-200 p-1 dark:border-gray-700">
+    <div className="flex rounded-[16px] bg-card">
       {options.map((option) => (
         <button
           key={option.key}
           onClick={() => onChange(option.key)}
           className={cn(
-            "rounded-md px-3 py-1.5 text-xs font-medium transition-colors",
+            "rounded-[16px] px-4 py-2 font-mono text-[11px] font-semibold uppercase transition-colors",
             value === option.key
-              ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900"
-              : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200",
+              ? "bg-teal text-text-dark"
+              : "text-muted-foreground hover:text-foreground",
           )}
         >
           {option.label}

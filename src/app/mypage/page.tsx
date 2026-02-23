@@ -3,10 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Star } from "lucide-react";
+import { Star, Loader } from "lucide-react";
 
 import { cn, formatRelativeTime } from "@/lib/utils";
-
 import { Header } from "@/components/common/Header";
 import { SortToggle } from "@/components/common/SortToggle";
 import { useAuth } from "@/features/auth/AuthContext";
@@ -16,15 +15,19 @@ import {
   removeFavoriteSourceApi,
 } from "@/features/auth/api";
 import { listSourcesApi } from "@/features/feed/sources/api";
+import {
+  CATEGORY_ORDER,
+  CATEGORY_DISPLAY_NAMES,
+} from "@/features/feed/categories/constants";
+
 import type { SourceItem } from "@/features/feed/sources/types";
-import { CATEGORY_ORDER } from "@/features/feed/categories/constants";
 
 type SortKey = "latest" | "name" | "favorite";
 
 const SORT_OPTIONS: { key: SortKey; label: string }[] = [
-  { key: "latest", label: "최신순" },
-  { key: "name", label: "이름순" },
-  { key: "favorite", label: "즐겨찾기순" },
+  { key: "latest", label: "LATEST" },
+  { key: "name", label: "NAME" },
+  { key: "favorite", label: "FAVORITES" },
 ];
 
 export default function MyPage() {
@@ -151,12 +154,14 @@ export default function MyPage() {
   return (
     <div className="min-h-screen">
       <Header />
-      <main className="mx-auto max-w-4xl px-4 py-8">
+      <main className="mx-auto max-w-4xl px-4 py-8 sm:px-8 lg:px-12">
         <div className="mb-8 flex items-end justify-between">
           <div>
-            <h1 className="mb-2 text-2xl font-bold">마이페이지</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              즐겨찾기한 소스의 아티클을 더 빠르게 확인하세요.
+            <h1 className="mb-2 font-sans text-2xl font-bold uppercase">
+              MY_SOURCES
+            </h1>
+            <p className="font-mono text-xs text-muted-foreground">
+              // manage_your_favorite_sources
             </p>
           </div>
           <SortToggle options={SORT_OPTIONS} value={sortKey} onChange={setSortKey} />
@@ -164,13 +169,15 @@ export default function MyPage() {
 
         {loading ? (
           <div className="flex justify-center py-16">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
+            <Loader className="h-6 w-6 animate-spin text-muted-foreground" />
           </div>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-10">
             {sourcesByCategory.map(({ category, sources: catSources }) => (
               <section key={category}>
-                <h2 className="mb-4 text-lg font-semibold">{category}</h2>
+                <h2 className="mb-4 font-sans text-lg font-semibold uppercase">
+                  {CATEGORY_DISPLAY_NAMES[category] || category}
+                </h2>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {catSources.map((source) => {
                     const isFav = favoriteIds.has(source.id);
@@ -181,10 +188,10 @@ export default function MyPage() {
                         onClick={() => handleToggleFavorite(source.id)}
                         disabled={isToggling}
                         className={cn(
-                          "flex items-center gap-3 rounded-xl border p-4 text-left transition-all",
+                          "flex items-center gap-3 rounded-[16px] border p-4 text-left transition-all",
                           isFav
-                            ? "border-yellow-300 bg-yellow-50 dark:border-yellow-600 dark:bg-yellow-900/20"
-                            : "border-gray-200 bg-white hover:border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-600",
+                            ? "border-orange/50 bg-orange/10"
+                            : "border-border bg-card hover:border-orange/30",
                           isToggling && "opacity-50",
                         )}
                       >
@@ -197,24 +204,24 @@ export default function MyPage() {
                             className="rounded-lg object-contain"
                           />
                         ) : (
-                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-xs font-bold text-gray-400 dark:bg-gray-800">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-elevated font-mono text-xs font-bold text-muted-foreground">
                             {source.name.charAt(0)}
                           </div>
                         )}
                         <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-medium">
+                          <p className="truncate font-mono text-sm font-medium text-foreground">
                             {source.name}
                           </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                          <p className="font-mono text-[11px] text-muted-foreground">
                             {formatRelativeTime(source.latest_published_at, "아티클 없음")}
                           </p>
                         </div>
                         <Star
                           className={cn(
-                            "h-5 w-5 shrink-0",
+                            "h-5 w-5 shrink-0 transition-colors",
                             isFav
-                              ? "fill-yellow-400 text-yellow-400"
-                              : "fill-none text-gray-300 dark:text-gray-600",
+                              ? "fill-orange text-orange"
+                              : "fill-none text-placeholder",
                           )}
                         />
                       </button>
