@@ -43,7 +43,7 @@ export default function LoginPage() {
         <div className="mb-8 flex flex-col items-center gap-2">
           <h1 className="font-sans text-4xl font-bold text-orange">DEVFEED</h1>
           <p className="font-mono text-xs text-muted-foreground">
-            // sign_in_to_continue
+            로그인하고 계속하세요
           </p>
         </div>
 
@@ -56,7 +56,7 @@ export default function LoginPage() {
 
           <div className="flex flex-col gap-2">
             <label htmlFor="login-email" className="font-mono text-xs font-semibold">
-              email
+              이메일
             </label>
             <div className="flex h-11 items-center gap-2 rounded-[16px] bg-elevated px-4">
               <Mail className="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -74,7 +74,7 @@ export default function LoginPage() {
 
           <div className="flex flex-col gap-2">
             <label htmlFor="login-password" className="font-mono text-xs font-semibold">
-              password
+              비밀번호
             </label>
             <div className="flex h-11 items-center gap-2 rounded-[16px] bg-elevated px-4">
               <Lock className="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -97,25 +97,25 @@ export default function LoginPage() {
             className="flex h-12 items-center justify-center gap-2 rounded-[16px] bg-orange font-mono text-sm font-semibold text-text-dark transition-colors hover:bg-orange/90 disabled:opacity-50"
           >
             {loading ? (
-              "signing_in..."
+              "로그인 중..."
             ) : (
               <>
                 <LogIn className="h-[18px] w-[18px]" />
-                sign_in
+                로그인
               </>
             )}
           </button>
 
           <div className="flex items-center gap-4">
             <div className="h-px flex-1 bg-border" />
-            <span className="font-mono text-[11px] text-muted-foreground">or</span>
+            <span className="font-mono text-[11px] text-muted-foreground">또는</span>
             <div className="h-px flex-1 bg-border" />
           </div>
 
           <p className="text-center font-mono text-xs text-muted-foreground">
-            // no_account?{" "}
+            계정이 없으신가요?{" "}
             <Link href="/register" className="font-semibold text-orange hover:text-orange/80">
-              register_here
+              회원가입
             </Link>
           </p>
         </form>

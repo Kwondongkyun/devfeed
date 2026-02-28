@@ -18,9 +18,19 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DevFeed - Tech News Aggregator",
+  title: {
+    default: "DevFeed - 개발자 기술 뉴스 모음",
+    template: "%s | DevFeed",
+  },
   description:
-    "Latest tech news from blogs, Hacker News, Dev.to and more in one place.",
+    "Hacker News, Dev.to, 한국 테크 블로그 등 개발자 기술 뉴스를 한곳에서 모아보세요.",
+  openGraph: {
+    title: "DevFeed - 개발자 기술 뉴스 모음",
+    description:
+      "Hacker News, Dev.to, 한국 테크 블로그 등 개발자 기술 뉴스를 한곳에서 모아보세요.",
+    locale: "ko_KR",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

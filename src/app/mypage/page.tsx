@@ -25,9 +25,9 @@ import type { SourceItem } from "@/features/feed/sources/types";
 type SortKey = "latest" | "name" | "favorite";
 
 const SORT_OPTIONS: { key: SortKey; label: string }[] = [
-  { key: "latest", label: "LATEST" },
-  { key: "name", label: "NAME" },
-  { key: "favorite", label: "FAVORITES" },
+  { key: "latest", label: "최신순" },
+  { key: "name", label: "이름순" },
+  { key: "favorite", label: "즐겨찾기" },
 ];
 
 export default function MyPage() {
@@ -158,10 +158,10 @@ export default function MyPage() {
         <div className="mb-8 flex items-end justify-between">
           <div>
             <h1 className="mb-2 font-sans text-2xl font-bold uppercase">
-              MY_SOURCES
+              내 소스
             </h1>
             <p className="font-mono text-xs text-muted-foreground">
-              // manage_your_favorite_sources
+              즐겨찾는 소스를 관리해보세요
             </p>
           </div>
           <SortToggle options={SORT_OPTIONS} value={sortKey} onChange={setSortKey} />
@@ -173,6 +173,13 @@ export default function MyPage() {
           </div>
         ) : (
           <div className="space-y-10">
+            {favoriteIds.size === 0 && (
+              <div className="flex items-center justify-center rounded-[16px] bg-card py-10">
+                <p className="font-mono text-xs text-muted-foreground">
+                  즐겨찾기한 소스가 없습니다. 소스를 눌러 즐겨찾기에 추가해보세요!
+                </p>
+              </div>
+            )}
             {sourcesByCategory.map(({ category, sources: catSources }) => (
               <section key={category}>
                 <h2 className="mb-4 font-sans text-lg font-semibold uppercase">

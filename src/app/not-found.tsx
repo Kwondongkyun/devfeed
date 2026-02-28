@@ -14,11 +14,11 @@ export default function NotFound() {
         <h1 className="mb-2 font-sans text-6xl font-bold text-orange">404</h1>
 
         <p className="mb-2 font-sans text-xl font-semibold text-foreground">
-          PAGE_NOT_FOUND
+          페이지를 찾을 수 없습니다
         </p>
 
         <p className="mb-8 font-mono text-sm text-muted-foreground">
-          // the_page_you_are_looking_for_does_not_exist
+          요청하신 페이지가 존재하지 않습니다
         </p>
 
         <Link
@@ -26,7 +26,7 @@ export default function NotFound() {
           className="inline-flex items-center gap-2 rounded-[16px] bg-orange px-6 py-3 font-mono text-sm font-semibold text-text-dark transition-colors hover:bg-orange/90"
         >
           <Home className="h-4 w-4" />
-          go_home
+          홈으로 돌아가기
         </Link>
       </div>
     </div>

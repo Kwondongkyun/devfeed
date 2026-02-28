@@ -94,6 +94,19 @@ export default function Home() {
     <div className="min-h-screen">
       <Header />
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-8 lg:px-12">
+        {!user && (
+          <div className="mb-6 flex items-center justify-between gap-4 rounded-[16px] bg-card px-5 py-4">
+            <p className="font-mono text-xs text-muted-foreground">
+              로그인하면 즐겨찾기 및 맞춤 피드를 이용할 수 있습니다
+            </p>
+            <Link
+              href="/login"
+              className="shrink-0 rounded-[16px] bg-orange px-4 py-2 font-mono text-xs font-semibold text-text-dark transition-colors hover:bg-orange/90"
+            >
+              로그인
+            </Link>
+          </div>
+        )}
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <SearchBar onSearch={setSearchQuery} />
           {user && (
@@ -105,12 +118,12 @@ export default function Home() {
               {fetching ? (
                 <>
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-text-dark/30 border-t-text-dark" />
-                  fetching...
+                  가져오는 중...
                 </>
               ) : (
                 <>
                   <RefreshCw className="h-4 w-4" />
-                  fetch_feeds
+                  새 글 가져오기
                 </>
               )}
             </button>
@@ -118,40 +131,53 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col gap-10">
-          {favoriteSourceIds.size > 0 && (
+          {user && (
             <section className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Star className="h-5 w-5 text-orange" />
-                  <h2 className="font-sans text-xl font-semibold uppercase">
-                    FAVORITES
+                  <h2 className="font-sans text-xl font-semibold">
+                    즐겨찾기
                   </h2>
                 </div>
-                <Link
-                  href="/mypage"
-                  className="font-mono text-[11px] text-orange transition-colors hover:text-orange/80"
-                >
-                  manage &gt;
-                </Link>
+                {favoriteSourceIds.size > 0 && (
+                  <Link
+                    href="/mypage"
+                    className="font-mono text-[11px] text-orange transition-colors hover:text-orange/80"
+                  >
+                    관리 &gt;
+                  </Link>
+                )}
               </div>
-              <div className="scrollbar-hide flex gap-3 overflow-x-auto pb-2">
-                {sources
-                  .filter((s) => favoriteSourceIds.has(s.id))
-                  .map((source) => (
-                    <Link
-                      key={source.id}
-                      href={`/category/${categoryToSlug(source.category)}?source=${source.id}`}
-                      className="flex shrink-0 items-center gap-2.5 rounded-[16px] bg-card px-4 py-3 transition-colors hover:bg-elevated"
-                    >
-                      <div
-                        className={`h-1.5 w-1.5 rounded-sm ${SOURCE_DOT_COLORS[source.type] || "bg-placeholder"}`}
-                      />
-                      <span className="font-mono text-[13px] text-foreground">
-                        {source.name.toLowerCase().replace(/\s+/g, "_")}
-                      </span>
+              {favoriteSourceIds.size === 0 ? (
+                <div className="flex items-center justify-center rounded-[16px] bg-card py-8">
+                  <p className="font-mono text-xs text-muted-foreground">
+                    즐겨찾기한 소스가 없습니다.{" "}
+                    <Link href="/mypage" className="text-orange underline-offset-2 hover:underline">
+                      소스를 추가해보세요!
                     </Link>
-                  ))}
-              </div>
+                  </p>
+                </div>
+              ) : (
+                <div className="scrollbar-hide flex gap-3 overflow-x-auto pb-2">
+                  {sources
+                    .filter((s) => favoriteSourceIds.has(s.id))
+                    .map((source) => (
+                      <Link
+                        key={source.id}
+                        href={`/category/${categoryToSlug(source.category)}?source=${source.id}`}
+                        className="flex shrink-0 items-center gap-2.5 rounded-[16px] bg-card px-4 py-3 transition-colors hover:bg-elevated"
+                      >
+                        <div
+                          className={`h-1.5 w-1.5 rounded-sm ${SOURCE_DOT_COLORS[source.type] || "bg-placeholder"}`}
+                        />
+                        <span className="font-mono text-[13px] text-foreground">
+                          {source.name}
+                        </span>
+                      </Link>
+                    ))}
+                </div>
+              )}
             </section>
           )}
           {categorySourceIds.map(({ category, sourceIds }) => (

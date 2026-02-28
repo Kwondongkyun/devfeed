@@ -24,16 +24,16 @@ export default function Error({ error, reset }: ErrorProps) {
         </div>
 
         <h1 className="mb-3 font-sans text-3xl font-bold text-foreground">
-          OOPS_SOMETHING_WENT_WRONG
+          문제가 발생했습니다
         </h1>
 
         <p className="mb-6 font-mono text-sm text-muted-foreground">
-          // {error.message || "unexpected_error_occurred"}
+          {error.message || "예상치 못한 오류가 발생했습니다"}
         </p>
 
         {error.digest && (
           <p className="mb-6 font-mono text-xs text-muted-foreground">
-            error_id: {error.digest}
+            오류 ID: {error.digest}
           </p>
         )}
 
@@ -43,7 +43,7 @@ export default function Error({ error, reset }: ErrorProps) {
             className="flex items-center justify-center gap-2 rounded-[16px] bg-orange px-6 py-3 font-mono text-sm font-semibold text-text-dark transition-colors hover:bg-orange/90"
           >
             <RefreshCw className="h-4 w-4" />
-            try_again
+            다시 시도
           </button>
 
           <Link
@@ -51,7 +51,7 @@ export default function Error({ error, reset }: ErrorProps) {
             className="flex items-center justify-center gap-2 rounded-[16px] border border-border bg-elevated px-6 py-3 font-mono text-sm font-semibold text-foreground transition-colors hover:bg-placeholder"
           >
             <Home className="h-4 w-4" />
-            go_home
+            홈으로 돌아가기
           </Link>
         </div>
       </div>

@@ -34,9 +34,9 @@ const ICON_MAP: Record<string, React.ElementType> = {
 type SortKey = "latest" | "oldest" | "unread";
 
 const SORT_OPTIONS: { key: SortKey; label: string }[] = [
-  { key: "latest", label: "LATEST" },
-  { key: "oldest", label: "OLDEST" },
-  { key: "unread", label: "UNREAD" },
+  { key: "latest", label: "최신순" },
+  { key: "oldest", label: "오래된순" },
+  { key: "unread", label: "안 읽은 글" },
 ];
 
 export default function CategoryPage() {
@@ -53,6 +53,7 @@ export default function CategoryPage() {
     searchParams.get("source"),
   );
   const [sortKey, setSortKey] = useState<SortKey>("latest");
+  const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<HTMLDivElement>(null);
   const loadingRef = useRef(false);
   const cursorRef = useRef<number | null>(null);
@@ -106,6 +107,7 @@ export default function CategoryPage() {
         });
         cursorRef.current = result.next_cursor;
         hasMoreRef.current = result.has_more;
+        setHasMore(result.has_more);
       } catch {
         // error handled by interceptor
       } finally {
@@ -129,6 +131,7 @@ export default function CategoryPage() {
     setArticles([]);
     cursorRef.current = null;
     hasMoreRef.current = true;
+    setHasMore(true);
     loadingRef.current = false;
     setInitialLoading(true);
     fetchArticles(true, controller.signal);
@@ -199,7 +202,7 @@ export default function CategoryPage() {
               {displayName}
             </h1>
             <span className="rounded-full bg-elevated px-3 py-1 font-mono text-xs text-muted-foreground">
-              {articles.length} articles
+              {articles.length}개의 글
             </span>
           </div>
           <SortToggle options={SORT_OPTIONS} value={sortKey} onChange={setSortKey} />
@@ -222,9 +225,9 @@ export default function CategoryPage() {
         ) : displayArticles.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
             <Newspaper className="mb-4 h-16 w-16" strokeWidth={1} />
-            <p className="font-sans text-lg font-semibold">NO_ARTICLES_FOUND</p>
+            <p className="font-sans text-lg font-semibold">아티클이 없습니다</p>
             <p className="mt-1 font-mono text-xs">
-              // try_fetching_feeds_or_adjust_filters
+              새 글 가져오기를 실행하거나 필터를 조정해보세요
             </p>
           </div>
         ) : (
@@ -235,12 +238,16 @@ export default function CategoryPage() {
               ))}
             </div>
             <div ref={observerRef} className="flex justify-center py-8">
-              {loading && (
+              {loading ? (
                 <div className="flex items-center gap-2 rounded-[16px] bg-card px-6 py-3">
                   <Loader className="h-4 w-4 animate-spin text-muted-foreground" />
-                  <span className="font-mono text-xs text-muted-foreground">loading_more...</span>
+                  <span className="font-mono text-xs text-muted-foreground">더 불러오는 중...</span>
                 </div>
-              )}
+              ) : !hasMore && articles.length > 0 ? (
+                <p className="font-mono text-xs text-muted-foreground">
+                  모든 글을 확인했습니다
+                </p>
+              ) : null}
             </div>
           </>
         )}

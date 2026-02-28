@@ -5,7 +5,7 @@ export default function Loading() {
     <div className="flex min-h-screen items-center justify-center">
       <div className="flex flex-col items-center gap-4">
         <Loader className="h-8 w-8 animate-spin text-orange" />
-        <p className="font-mono text-xs text-muted-foreground">loading...</p>
+        <p className="font-mono text-xs text-muted-foreground">불러오는 중...</p>
       </div>
     </div>
   );

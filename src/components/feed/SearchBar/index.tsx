@@ -30,7 +30,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="search_articles..."
+        placeholder="아티클 검색..."
         className="h-10 w-full rounded-[16px] border-0 bg-elevated py-2 pl-11 pr-10 font-mono text-xs text-foreground outline-none ring-0 placeholder:text-muted-foreground focus:ring-1 focus:ring-orange"
       />
       {value && (

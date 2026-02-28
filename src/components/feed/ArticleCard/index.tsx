@@ -74,7 +74,7 @@ export function ArticleCard({ article, layout = "card", onRead }: ArticleCardPro
               {formatRelativeTime(article.published_at)}
             </span>
             {article.is_read && (
-              <span className="font-mono text-[9px] text-muted-foreground">// READ</span>
+              <span className="font-mono text-[9px] text-muted-foreground">읽음</span>
             )}
           </div>
           <p className="line-clamp-1 font-mono text-[13px] font-semibold text-foreground">
@@ -115,7 +115,7 @@ export function ArticleCard({ article, layout = "card", onRead }: ArticleCardPro
             src={safeImageUrl}
             alt=""
             fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            sizes="(max-width: 640px) 288px, 320px"
             className="object-cover transition-transform group-hover:scale-105"
             onError={() => setImageError(true)}
           />

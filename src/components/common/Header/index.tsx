@@ -24,7 +24,7 @@ export function Header() {
             DEVFEED
           </span>
           <span className="hidden font-mono text-[11px] text-muted-foreground sm:inline">
-            // tech_news_aggregator
+            개발자 기술 뉴스 모음
           </span>
         </Link>
 
@@ -44,7 +44,7 @@ export function Header() {
                     className="flex items-center gap-1.5 rounded-[16px] px-3 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground"
                   >
                     <LogOut className="h-3.5 w-3.5" />
-                    logout
+                    로그아웃
                   </button>
                 </div>
               ) : (
@@ -53,7 +53,7 @@ export function Header() {
                   className="flex items-center gap-2 rounded-[16px] bg-orange px-4 py-2 font-mono text-xs font-semibold text-text-dark transition-colors hover:bg-orange/90"
                 >
                   <LogIn className="h-4 w-4" />
-                  login
+                  로그인
                 </Link>
               )}
             </>
@@ -61,7 +61,7 @@ export function Header() {
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="flex h-10 w-10 items-center justify-center rounded-[16px] bg-elevated text-muted-foreground transition-colors hover:text-foreground"
-            aria-label="Toggle theme"
+            aria-label="테마 전환"
           >
             {mounted ? (
               theme === "dark" ? (

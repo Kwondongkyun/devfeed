@@ -32,9 +32,9 @@ export function getSourceIdsForCategory(
 }
 
 export const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
-  "개발자 커뮤니티": "DEVELOPER_COMMUNITY",
-  "AI 기업 블로그": "AI_COMPANY_BLOGS",
-  "한국 테크 블로그": "KOREAN_TECH_BLOGS",
+  "개발자 커뮤니티": "개발자 커뮤니티",
+  "AI 기업 블로그": "AI 기업 블로그",
+  "한국 테크 블로그": "한국 테크 블로그",
 };
 
 export const CATEGORY_ICONS: Record<string, string> = {

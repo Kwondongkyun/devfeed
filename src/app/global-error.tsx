@@ -25,16 +25,16 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
             </div>
 
             <h1 className="mb-3 font-sans text-3xl font-bold text-foreground">
-              CRITICAL_ERROR
+              심각한 오류가 발생했습니다
             </h1>
 
             <p className="mb-6 font-mono text-sm text-muted-foreground">
-              // application_encountered_critical_error
+              애플리케이션에 심각한 오류가 발생했습니다
             </p>
 
             {error.digest && (
               <p className="mb-6 font-mono text-xs text-muted-foreground">
-                error_id: {error.digest}
+                오류 ID: {error.digest}
               </p>
             )}
 
@@ -42,7 +42,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               onClick={reset}
               className="rounded-[16px] bg-orange px-6 py-3 font-mono text-sm font-semibold text-text-dark transition-colors hover:bg-orange/90"
             >
-              reload_application
+              앱 새로고침
             </button>
           </div>
         </div>

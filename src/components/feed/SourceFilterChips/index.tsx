@@ -26,7 +26,7 @@ export function SourceFilterChips({
             : "border border-border bg-transparent text-muted-foreground hover:text-foreground",
         )}
       >
-        ALL
+        전체
       </button>
       {sources.map((source) => (
         <button
