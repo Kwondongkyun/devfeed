@@ -20,7 +20,7 @@ interface ArticleData {
 async function fetchRss(source: { id: string; url: string; category: string }): Promise<ArticleData[]> {
   try {
     const feed = await rssParser.parseURL(source.url);
-    return feed.items.slice(0, 30).map((item) => {
+    return feed.items.slice(0, 30).map((item: any) => {
       const rawSummary = item.contentSnippet || item.summary || item.content || "";
       const summary = rawSummary.replace(/<[^>]+>/g, "").slice(0, 300) || undefined;
 
@@ -46,7 +46,8 @@ async function fetchRss(source: { id: string; url: string; category: string }): 
         source_id: source.id,
       };
     }).filter((a) => a.url);
-  } catch {
+  } catch (e) {
+    console.error(`[fetchRss] ${source.url}:`, e);
     return [];
   }
 }
@@ -81,7 +82,8 @@ async function fetchHackerNews(source: { id: string; category: string }): Promis
           source_id: source.id,
         };
       });
-  } catch {
+  } catch (e) {
+    console.error("[fetchHackerNews]:", e);
     return [];
   }
 }
@@ -102,7 +104,8 @@ async function fetchDevto(source: { id: string; category: string }): Promise<Art
       published_at: a.published_at ?? new Date().toISOString(),
       source_id: source.id,
     }));
-  } catch {
+  } catch (e) {
+    console.error("[fetchDevto]:", e);
     return [];
   }
 }
@@ -156,7 +159,11 @@ export async function POST(req: NextRequest) {
   for (let i = 0; i < newArticles.length; i += chunkSize) {
     const chunk = newArticles.slice(i, i + chunkSize);
     const { error } = await db.from("article").insert(chunk);
-    if (!error) inserted += chunk.length;
+    if (error) {
+      console.error("[fetch-feeds] insert error:", error);
+    } else {
+      inserted += chunk.length;
+    }
   }
 
   return ok({

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { RefreshCw, Star } from "lucide-react";
 
@@ -34,6 +34,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [fetching, setFetching] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const autoFetchTriggered = useRef(false);
 
   useEffect(() => {
     listSourcesApi()
@@ -82,6 +83,33 @@ export default function Home() {
       setFetching(false);
     }
   }, [refreshData]);
+
+  // 소스 로드 후 최신 글이 1시간 이상 지났으면 자동 fetch
+  useEffect(() => {
+    if (sources.length === 0 || autoFetchTriggered.current || fetching) return;
+
+    const latestDates = sources
+      .map((s) => s.latest_published_at)
+      .filter(Boolean) as string[];
+
+    if (latestDates.length === 0) {
+      // 글이 하나도 없으면 바로 fetch
+      autoFetchTriggered.current = true;
+      handleFetchFeeds();
+      return;
+    }
+
+    const mostRecent = new Date(
+      Math.max(...latestDates.map((d) => new Date(d).getTime())),
+    );
+    const ageMs = Date.now() - mostRecent.getTime();
+    const ONE_HOUR = 60 * 60 * 1000;
+
+    if (ageMs > ONE_HOUR) {
+      autoFetchTriggered.current = true;
+      handleFetchFeeds();
+    }
+  }, [sources, fetching, handleFetchFeeds]);
 
   const categorySourceIds = useMemo(() => {
     return CATEGORY_ORDER.map((category) => ({
