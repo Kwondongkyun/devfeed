@@ -18,26 +18,27 @@ export default function Image() {
           alignItems: "center",
           justifyContent: "center",
           fontFamily: "sans-serif",
+          padding: "60px",
         }}
       >
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "16px",
-            marginBottom: "32px",
+            gap: "24px",
+            marginBottom: "48px",
           }}
         >
           <div
             style={{
-              width: "64px",
-              height: "64px",
-              borderRadius: "16px",
+              width: "88px",
+              height: "88px",
+              borderRadius: "20px",
               background: "#e94560",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "36px",
+              fontSize: "48px",
               fontWeight: 700,
               color: "#fff",
             }}
@@ -46,10 +47,10 @@ export default function Image() {
           </div>
           <span
             style={{
-              fontSize: "56px",
+              fontSize: "80px",
               fontWeight: 700,
               color: "#ffffff",
-              letterSpacing: "-1px",
+              letterSpacing: "-2px",
             }}
           >
             DevFeed
@@ -57,22 +58,20 @@ export default function Image() {
         </div>
         <div
           style={{
-            fontSize: "24px",
+            fontSize: "36px",
             color: "#a0aec0",
             textAlign: "center",
-            maxWidth: "600px",
-            lineHeight: 1.5,
+            lineHeight: 1.6,
           }}
         >
           Hacker News, Dev.to, 한국 테크 블로그 등
         </div>
         <div
           style={{
-            fontSize: "24px",
+            fontSize: "36px",
             color: "#a0aec0",
             textAlign: "center",
-            maxWidth: "600px",
-            lineHeight: 1.5,
+            lineHeight: 1.6,
           }}
         >
           개발자 기술 뉴스를 한곳에서 모아보세요
@@ -80,19 +79,19 @@ export default function Image() {
         <div
           style={{
             display: "flex",
-            gap: "12px",
-            marginTop: "40px",
+            gap: "16px",
+            marginTop: "52px",
           }}
         >
           {["HackerNews", "Dev.to", "요즘IT", "토스", "카카오"].map((name) => (
             <div
               key={name}
               style={{
-                padding: "8px 20px",
+                padding: "12px 28px",
                 borderRadius: "999px",
-                background: "rgba(255,255,255,0.1)",
+                background: "rgba(255,255,255,0.12)",
                 color: "#e2e8f0",
-                fontSize: "16px",
+                fontSize: "22px",
               }}
             >
               {name}
