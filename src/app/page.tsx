@@ -123,16 +123,10 @@ export default function Home() {
       <Header />
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-8 lg:px-12">
         {!user && (
-          <div className="mb-6 flex items-center justify-between gap-4 rounded-[16px] bg-card px-5 py-4">
+          <div className="mb-6 flex items-center rounded-[16px] bg-card px-5 py-4">
             <p className="font-mono text-xs text-muted-foreground">
               로그인하면 즐겨찾기 및 맞춤 피드를 이용할 수 있습니다
             </p>
-            <Link
-              href="/login"
-              className="shrink-0 rounded-[16px] bg-orange px-4 py-2 font-mono text-xs font-semibold text-text-dark transition-colors hover:bg-orange/90"
-            >
-              로그인
-            </Link>
           </div>
         )}
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
