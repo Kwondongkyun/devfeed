@@ -1,0 +1,33 @@
+name: Cron - Fetch Feeds
+
+on:
+  schedule:
+    # 매 1시간마다 실행 (UTC 기준)
+    - cron: "0 * * * *"
+  workflow_dispatch: # 수동 트리거 지원
+
+jobs:
+  fetch-feeds:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Trigger feed fetch
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "${SITE_URL}/api/v1/cron/fetch-feeds" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -H "Content-Type: application/json")
+
+          http_code=$(echo "$response" | tail -1)
+          body=$(echo "$response" | sed '$d')
+
+          echo "HTTP Status: $http_code"
+          echo "Response: $body"
+
+          if [ "$http_code" -ne 200 ]; then
+            echo "::error::Feed fetch failed with status $http_code"
+            exit 1
+          fi

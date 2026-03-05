@@ -145,10 +145,15 @@ export async function POST(req: NextRequest) {
     return ok({ success: true, inserted: 0, total_fetched: 0, duplicates_skipped: 0, timestamp: new Date().toISOString() });
   }
 
-  // Deduplicate against existing URLs
+  // Deduplicate against existing URLs (chunk .in() queries to avoid PostgREST URL length limit)
   const urls = allArticles.map((a) => a.url);
-  const { data: existing } = await db.from("article").select("url").in("url", urls);
-  const existingUrls = new Set((existing ?? []).map((e) => e.url));
+  const existingUrls = new Set<string>();
+  const urlChunkSize = 50;
+  for (let i = 0; i < urls.length; i += urlChunkSize) {
+    const urlChunk = urls.slice(i, i + urlChunkSize);
+    const { data: existing } = await db.from("article").select("url").in("url", urlChunk);
+    for (const e of existing ?? []) existingUrls.add(e.url);
+  }
 
   const newArticles = allArticles.filter((a) => !existingUrls.has(a.url));
   const duplicatesSkipped = totalFetched - newArticles.length;
