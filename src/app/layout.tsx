@@ -18,6 +18,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || "https://main.d3iahqpdtwqyfp.amplifyapp.com",
+  ),
   title: {
     default: "DevFeed - 개발자 기술 뉴스 모음",
     template: "%s | DevFeed",
