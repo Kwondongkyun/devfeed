@@ -43,21 +43,21 @@
 .dark {
   /* Dark mode colors */
   --background: #1A1A1A;
-  --foreground: #FFFFFF;
-  --card: #212121;
-  --card-foreground: #FFFFFF;
-  --popover: #212121;
-  --popover-foreground: #FFFFFF;
+  --foreground: #E8E8E8;
+  --card: #242424;
+  --card-foreground: #E8E8E8;
+  --popover: #242424;
+  --popover-foreground: #E8E8E8;
   --primary: #FF6B35;
   --primary-foreground: #0D0D0D;
   --secondary: #2D2D2D;
-  --secondary-foreground: #FFFFFF;
+  --secondary-foreground: #E0E0E0;
   --muted: #2D2D2D;
-  --muted-foreground: #777777;
+  --muted-foreground: #9CA3AF;
   --accent: #00D4AA;
   --accent-foreground: #0D0D0D;
   --destructive: #E85D75;
-  --border: #3D3D3D;
+  --border: #404040;
   --input: #2D2D2D;
   --ring: #FF6B35;
   --chart-1: #FF6B35;
