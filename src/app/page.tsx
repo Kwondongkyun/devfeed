@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { RefreshCw, Star } from "lucide-react";
+import { Star } from "lucide-react";
 
 import { Header } from "@/components/common/Header";
 import { SearchBar } from "@/components/feed/SearchBar";
@@ -10,7 +10,6 @@ import { CategoryRow } from "@/components/feed/CategoryRow";
 import { useAuth } from "@/features/auth/AuthContext";
 import { listFavoriteSourcesApi } from "@/features/auth/api";
 import { listSourcesApi } from "@/features/feed/sources/api";
-import { fetchFeedsApi } from "@/features/feed/cron/api";
 import {
   CATEGORY_ORDER,
   categoryToSlug,
@@ -32,9 +31,7 @@ export default function Home() {
     new Set(),
   );
   const [searchQuery, setSearchQuery] = useState("");
-  const [fetching, setFetching] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-  const autoFetchTriggered = useRef(false);
 
   useEffect(() => {
     listSourcesApi()
@@ -56,60 +53,6 @@ export default function Home() {
       });
   }, [user]);
 
-  const refreshData = useCallback(() => {
-    listSourcesApi()
-      .then(setSources)
-      .catch(() => {
-        // Error handled by axios interceptor
-      });
-    if (user) {
-      listFavoriteSourcesApi()
-        .then((ids) => setFavoriteSourceIds(new Set(ids)))
-        .catch(() => {
-        // Error handled by axios interceptor
-      });
-    }
-  }, [user]);
-
-  const handleFetchFeeds = useCallback(async () => {
-    setFetching(true);
-    try {
-      await fetchFeedsApi();
-      refreshData();
-      setRefreshKey((k) => k + 1);
-    } catch {
-      // error handled by interceptor
-    } finally {
-      setFetching(false);
-    }
-  }, [refreshData]);
-
-  // 소스 로드 후 최신 글이 1시간 이상 지났으면 자동 fetch
-  useEffect(() => {
-    if (sources.length === 0 || autoFetchTriggered.current || fetching) return;
-
-    const latestDates = sources
-      .map((s) => s.latest_published_at)
-      .filter(Boolean) as string[];
-
-    if (latestDates.length === 0) {
-      // 글이 하나도 없으면 바로 fetch
-      autoFetchTriggered.current = true;
-      handleFetchFeeds();
-      return;
-    }
-
-    const mostRecent = new Date(
-      Math.max(...latestDates.map((d) => new Date(d).getTime())),
-    );
-    const ageMs = Date.now() - mostRecent.getTime();
-    const ONE_HOUR = 60 * 60 * 1000;
-
-    if (ageMs > ONE_HOUR) {
-      autoFetchTriggered.current = true;
-      handleFetchFeeds();
-    }
-  }, [sources, fetching, handleFetchFeeds]);
 
   const categorySourceIds = useMemo(() => {
     return CATEGORY_ORDER.map((category) => ({
@@ -129,27 +72,8 @@ export default function Home() {
             </p>
           </div>
         )}
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-8">
           <SearchBar onSearch={setSearchQuery} />
-          {user && (
-            <button
-              onClick={handleFetchFeeds}
-              disabled={fetching}
-              className="inline-flex items-center gap-2 rounded-[16px] bg-orange px-5 py-2.5 font-mono text-xs font-semibold text-text-dark transition-colors hover:bg-orange/90 disabled:opacity-50"
-            >
-              {fetching ? (
-                <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-text-dark/30 border-t-text-dark" />
-                  가져오는 중...
-                </>
-              ) : (
-                <>
-                  <RefreshCw className="h-4 w-4" />
-                  새 글 가져오기
-                </>
-              )}
-            </button>
-          )}
         </div>
 
         <div className="flex flex-col gap-10">
