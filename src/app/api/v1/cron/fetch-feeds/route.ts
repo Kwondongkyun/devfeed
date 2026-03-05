@@ -3,7 +3,10 @@ import Parser from "rss-parser";
 import { db } from "@/lib/db/supabase";
 import { ok, err } from "@/lib/api/response";
 
-const rssParser = new Parser({ timeout: 10000 });
+const rssParser = new Parser({
+  timeout: 10000,
+  headers: { "User-Agent": "DevFeed/1.0 RSS Reader", Accept: "application/rss+xml, application/atom+xml, application/xml, text/xml" },
+});
 
 interface ArticleData {
   title: string;
