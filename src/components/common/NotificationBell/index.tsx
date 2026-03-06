@@ -173,7 +173,7 @@ export function NotificationBell() {
                 </div>
                 <div className="min-w-0 grow">
                   <p className="font-mono text-[10px] text-muted-foreground">
-                    {notification.article.source.name}
+                    {notification.article.source?.name ?? "알 수 없음"}
                   </p>
                   <p
                     className={cn(
