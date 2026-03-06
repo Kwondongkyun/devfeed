@@ -6,6 +6,7 @@ import { LogIn, LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { useAuth } from "@/features/auth/AuthContext";
+import { NotificationBell } from "@/components/common/NotificationBell";
 
 export function Header() {
   const { user, loading, logout } = useAuth();
@@ -46,6 +47,7 @@ export function Header() {
                     <LogOut className="h-3.5 w-3.5" />
                     로그아웃
                   </button>
+                  <NotificationBell />
                 </div>
               ) : (
                 <Link

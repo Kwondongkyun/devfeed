@@ -174,11 +174,68 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Generate notifications for users who favorited these sources
+  let notificationsCreated = 0;
+  if (inserted > 0) {
+    // Get source_ids of newly inserted articles
+    const newSourceIds = [...new Set(newArticles.map((a) => a.source_id))];
+
+    // Find users who favorited these sources
+    const { data: favorites } = await db
+      .from("favorite_source")
+      .select("user_id, source_id")
+      .in("source_id", newSourceIds);
+
+    if (favorites?.length) {
+      // Get inserted articles' IDs by URL
+      const insertedUrls = newArticles.slice(0, inserted).map((a) => a.url);
+      const insertedArticles: { id: number; url: string; source_id: string }[] = [];
+      for (let i = 0; i < insertedUrls.length; i += urlChunkSize) {
+        const chunk = insertedUrls.slice(i, i + urlChunkSize);
+        const { data } = await db.from("article").select("id, url, source_id").in("url", chunk);
+        if (data) insertedArticles.push(...data);
+      }
+
+      // Build notification records: each user × each article from their favorited sources
+      const articlesBySource = new Map<string, { id: number }[]>();
+      for (const a of insertedArticles) {
+        const list = articlesBySource.get(a.source_id) ?? [];
+        list.push({ id: a.id });
+        articlesBySource.set(a.source_id, list);
+      }
+
+      const notifications: { user_id: number; article_id: number; source_id: string }[] = [];
+      for (const fav of favorites) {
+        const articles = articlesBySource.get(fav.source_id);
+        if (!articles) continue;
+        for (const a of articles) {
+          notifications.push({
+            user_id: fav.user_id,
+            article_id: a.id,
+            source_id: fav.source_id,
+          });
+        }
+      }
+
+      // Bulk insert notifications in chunks
+      for (let i = 0; i < notifications.length; i += chunkSize) {
+        const chunk = notifications.slice(i, i + chunkSize);
+        const { error: nErr } = await db.from("notification").insert(chunk);
+        if (nErr) {
+          console.error("[fetch-feeds] notification insert error:", nErr);
+        } else {
+          notificationsCreated += chunk.length;
+        }
+      }
+    }
+  }
+
   return ok({
     success: true,
     inserted,
     total_fetched: totalFetched,
     duplicates_skipped: duplicatesSkipped,
+    notifications_created: notificationsCreated,
     timestamp: new Date().toISOString(),
   });
 }
