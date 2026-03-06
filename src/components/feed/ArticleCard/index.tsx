@@ -44,7 +44,7 @@ export function ArticleCard({ article, layout = "card", onRead }: ArticleCardPro
         rel="noopener noreferrer"
         onClick={handleClick}
         className={cn(
-          "group flex items-center gap-4 bg-card px-6 py-4 transition-colors hover:bg-elevated",
+          "group flex cursor-pointer items-center gap-4 bg-card px-6 py-4 transition-colors hover:bg-elevated",
           article.is_read && "opacity-50",
         )}
       >
@@ -105,7 +105,7 @@ export function ArticleCard({ article, layout = "card", onRead }: ArticleCardPro
       rel="noopener noreferrer"
       onClick={handleClick}
       className={cn(
-        "group flex flex-col overflow-hidden rounded-[16px] bg-card transition-all hover:ring-1 hover:ring-orange/30",
+        "group flex cursor-pointer flex-col overflow-hidden rounded-[16px] bg-card transition-all hover:ring-1 hover:ring-orange/30",
         article.is_read && "opacity-50",
       )}
     >

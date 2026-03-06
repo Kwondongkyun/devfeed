@@ -94,7 +94,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="flex h-12 items-center justify-center gap-2 rounded-[16px] bg-orange font-mono text-sm font-semibold text-text-dark transition-colors hover:bg-orange/90 disabled:opacity-50"
+            className="flex h-12 cursor-pointer items-center justify-center gap-2 rounded-[16px] bg-orange font-mono text-sm font-semibold text-text-dark transition-colors hover:bg-orange/90 disabled:opacity-50"
           >
             {loading ? (
               "로그인 중..."
@@ -114,7 +114,7 @@ export default function LoginPage() {
 
           <p className="text-center font-mono text-xs text-muted-foreground">
             계정이 없으신가요?{" "}
-            <Link href="/register" className="font-semibold text-orange hover:text-orange/80">
+            <Link href="/register" className="cursor-pointer font-semibold text-orange hover:text-orange/80">
               회원가입
             </Link>
           </p>

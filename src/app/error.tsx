@@ -40,7 +40,7 @@ export default function Error({ error, reset }: ErrorProps) {
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <button
             onClick={reset}
-            className="flex items-center justify-center gap-2 rounded-[16px] bg-orange px-6 py-3 font-mono text-sm font-semibold text-text-dark transition-colors hover:bg-orange/90"
+            className="flex cursor-pointer items-center justify-center gap-2 rounded-[16px] bg-orange px-6 py-3 font-mono text-sm font-semibold text-text-dark transition-colors hover:bg-orange/90"
           >
             <RefreshCw className="h-4 w-4" />
             다시 시도
@@ -48,7 +48,7 @@ export default function Error({ error, reset }: ErrorProps) {
 
           <Link
             href="/"
-            className="flex items-center justify-center gap-2 rounded-[16px] border border-border bg-elevated px-6 py-3 font-mono text-sm font-semibold text-foreground transition-colors hover:bg-placeholder"
+            className="flex cursor-pointer items-center justify-center gap-2 rounded-[16px] border border-border bg-elevated px-6 py-3 font-mono text-sm font-semibold text-foreground transition-colors hover:bg-placeholder"
           >
             <Home className="h-4 w-4" />
             홈으로 돌아가기

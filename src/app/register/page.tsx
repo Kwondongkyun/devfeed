@@ -144,7 +144,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="flex h-12 items-center justify-center gap-2 rounded-[16px] bg-orange font-mono text-sm font-semibold text-text-dark transition-colors hover:bg-orange/90 disabled:opacity-50"
+            className="flex h-12 cursor-pointer items-center justify-center gap-2 rounded-[16px] bg-orange font-mono text-sm font-semibold text-text-dark transition-colors hover:bg-orange/90 disabled:opacity-50"
           >
             {loading ? (
               "가입 중..."
@@ -164,7 +164,7 @@ export default function RegisterPage() {
 
           <p className="text-center font-mono text-xs text-muted-foreground">
             이미 계정이 있으신가요?{" "}
-            <Link href="/login" className="font-semibold text-orange hover:text-orange/80">
+            <Link href="/login" className="cursor-pointer font-semibold text-orange hover:text-orange/80">
               로그인
             </Link>
           </p>

@@ -89,7 +89,7 @@ export default function Home() {
                 {favoriteSourceIds.size > 0 && (
                   <Link
                     href="/mypage"
-                    className="font-mono text-[11px] text-orange transition-colors hover:text-orange/80"
+                    className="cursor-pointer font-mono text-[11px] text-orange transition-colors hover:text-orange/80"
                   >
                     관리 &gt;
                   </Link>
@@ -99,7 +99,7 @@ export default function Home() {
                 <div className="flex items-center justify-center rounded-[16px] bg-card py-8">
                   <p className="font-mono text-xs text-muted-foreground">
                     즐겨찾기한 소스가 없습니다.{" "}
-                    <Link href="/mypage" className="text-orange underline-offset-2 hover:underline">
+                    <Link href="/mypage" className="cursor-pointer text-orange underline-offset-2 hover:underline">
                       소스를 추가해보세요!
                     </Link>
                   </p>
@@ -112,7 +112,7 @@ export default function Home() {
                       <Link
                         key={source.id}
                         href={`/category/${categoryToSlug(source.category)}?source=${source.id}`}
-                        className="flex shrink-0 items-center gap-2.5 rounded-[16px] bg-card px-4 py-3 transition-colors hover:bg-elevated"
+                        className="flex shrink-0 cursor-pointer items-center gap-2.5 rounded-[16px] bg-card px-4 py-3 transition-colors hover:bg-elevated"
                       >
                         <div
                           className={`h-1.5 w-1.5 rounded-sm ${SOURCE_DOT_COLORS[source.type] || "bg-placeholder"}`}

@@ -156,7 +156,7 @@ export function CategoryRow({ category, sourceIds, searchQuery, hideMoreLink, re
         {!hideMoreLink && (
           <Link
             href={`/category/${categoryToSlug(category)}`}
-            className="font-mono text-[11px] text-orange transition-colors hover:text-orange/80"
+            className="cursor-pointer font-mono text-[11px] text-orange transition-colors hover:text-orange/80"
           >
             전체 보기 &gt;
           </Link>
@@ -169,7 +169,7 @@ export function CategoryRow({ category, sourceIds, searchQuery, hideMoreLink, re
             <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-12 bg-gradient-to-r from-background to-transparent" />
             <button
               onClick={() => scrollBy("left")}
-              className="absolute left-2 top-1/2 z-20 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-card shadow-md transition-colors hover:bg-elevated sm:flex"
+              className="absolute left-2 top-1/2 z-20 hidden h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-card shadow-md transition-colors hover:bg-elevated sm:flex"
             >
               <ChevronLeft className="h-4 w-4 text-foreground" />
             </button>
@@ -180,7 +180,7 @@ export function CategoryRow({ category, sourceIds, searchQuery, hideMoreLink, re
             <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-12 bg-gradient-to-l from-background to-transparent" />
             <button
               onClick={() => scrollBy("right")}
-              className="absolute right-2 top-1/2 z-20 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-card shadow-md transition-colors hover:bg-elevated sm:flex"
+              className="absolute right-2 top-1/2 z-20 hidden h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-card shadow-md transition-colors hover:bg-elevated sm:flex"
             >
               <ChevronRight className="h-4 w-4 text-foreground" />
             </button>

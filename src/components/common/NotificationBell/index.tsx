@@ -112,7 +112,7 @@ export function NotificationBell() {
       <PopoverTrigger asChild>
         <button
           className={cn(
-            "relative flex h-10 w-10 items-center justify-center rounded-[16px] bg-elevated text-muted-foreground transition-colors hover:text-foreground",
+            "relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-[16px] bg-elevated text-muted-foreground transition-colors hover:text-foreground",
           )}
           aria-label="알림"
         >
@@ -133,7 +133,7 @@ export function NotificationBell() {
           {unreadCount > 0 && (
             <button
               onClick={handleMarkAllRead}
-              className="flex items-center gap-1 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
+              className="flex cursor-pointer items-center gap-1 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
             >
               <Check className="h-3 w-3" />
               모두 읽음
@@ -161,7 +161,7 @@ export function NotificationBell() {
                 key={notification.id}
                 onClick={() => handleClickNotification(notification)}
                 className={cn(
-                  "flex w-full items-start gap-3 border-b border-border px-4 py-3 text-left transition-colors hover:bg-elevated",
+                  "flex w-full cursor-pointer items-start gap-3 border-b border-border px-4 py-3 text-left transition-colors hover:bg-elevated",
                   !notification.is_read && "bg-primary/5",
                 )}
               >

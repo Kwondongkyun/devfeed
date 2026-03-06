@@ -195,7 +195,7 @@ export default function MyPage() {
                         onClick={() => handleToggleFavorite(source.id)}
                         disabled={isToggling}
                         className={cn(
-                          "flex items-center gap-3 rounded-[16px] border p-4 text-left transition-all",
+                          "flex cursor-pointer items-center gap-3 rounded-[16px] border p-4 text-left transition-all",
                           isFav
                             ? "border-orange/50 bg-orange/10"
                             : "border-border bg-card hover:border-orange/30",
