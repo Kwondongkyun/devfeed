@@ -109,16 +109,20 @@ export function CategoryRow({ category, sourceIds, searchQuery, hideMoreLink, re
   if (loading) {
     return (
       <section ref={sectionRef} className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="h-6 w-48 animate-pulse rounded bg-placeholder" />
-        </div>
-        <div className="flex gap-4 overflow-hidden">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="w-72 shrink-0 sm:w-80">
-              <ArticleCardSkeleton />
+        {isVisible && (
+          <>
+            <div className="flex items-center justify-between">
+              <div className="h-6 w-48 animate-pulse rounded bg-placeholder" />
             </div>
-          ))}
-        </div>
+            <div className="flex gap-4 overflow-hidden">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="w-72 shrink-0 sm:w-80">
+                  <ArticleCardSkeleton />
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </section>
     );
   }
