@@ -64,7 +64,7 @@ export default function Image() {
             lineHeight: 1.6,
           }}
         >
-          Hacker News, Dev.to, 한국 테크 블로그 등
+          GeekNews, 요즘IT, 한국 테크 블로그 등
         </div>
         <div
           style={{
