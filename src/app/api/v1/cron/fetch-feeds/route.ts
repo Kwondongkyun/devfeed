@@ -115,6 +115,8 @@ async function fetchDevto(source: { id: string; category: string }): Promise<Art
 
 // ── Main Handler ─────────────────────────────────────────
 export async function POST(req: NextRequest) {
+  const startTime = Date.now();
+
   const cronSecret = process.env.CRON_SECRET;
   if (cronSecret) {
     const auth = req.headers.get("authorization");
@@ -229,6 +231,16 @@ export async function POST(req: NextRequest) {
       }
     }
   }
+
+  const durationMs = Date.now() - startTime;
+  await db.from("cron_log").insert({
+    status: "success",
+    total_fetched: totalFetched,
+    inserted,
+    duplicates_skipped: duplicatesSkipped,
+    notifications_created: notificationsCreated,
+    duration_ms: durationMs,
+  });
 
   return ok({
     success: true,
