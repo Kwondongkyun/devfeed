@@ -19,18 +19,18 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_URL || "https://main.d3iahqpdtwqyfp.amplifyapp.com",
+    process.env.NEXT_PUBLIC_BASE_URL || "https://www.devfeed.kr",
   ),
   title: {
     default: "DevFeed - 개발자 기술 뉴스 모음",
     template: "%s | DevFeed",
   },
   description:
-    "Hacker News, Dev.to, 한국 테크 블로그 등 개발자 기술 뉴스를 한곳에서 모아보세요.",
+    "GeekNews, 요즘IT, 카카오테크, 토스 테크, 네이버 D2, HackerNews, Dev.to 등 국내외 주요 기술 블로그와 커뮤니티의 최신 글을 한 피드에서 모아보세요.",
   openGraph: {
     title: "DevFeed - 개발자 기술 뉴스 모음",
     description:
-      "Hacker News, Dev.to, 한국 테크 블로그 등 개발자 기술 뉴스를 한곳에서 모아보세요.",
+      "GeekNews, 요즘IT, 카카오테크, 토스 테크, 네이버 D2, HackerNews, Dev.to 등 국내외 주요 기술 블로그와 커뮤니티의 최신 글을 한 피드에서 모아보세요.",
     locale: "ko_KR",
     type: "website",
   },
