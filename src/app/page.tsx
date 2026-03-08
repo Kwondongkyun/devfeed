@@ -126,15 +126,17 @@ export default function Home() {
               )}
             </section>
           )}
-          {categorySourceIds.map(({ category, sourceIds }) => (
-            <CategoryRow
-              key={category}
-              category={category}
-              sourceIds={sourceIds}
-              searchQuery={searchQuery}
-              refreshKey={refreshKey}
-            />
-          ))}
+          {categorySourceIds
+            .filter(({ sourceIds }) => sources.length === 0 || sourceIds.length > 0)
+            .map(({ category, sourceIds }) => (
+              <CategoryRow
+                key={category}
+                category={category}
+                sourceIds={sourceIds}
+                searchQuery={searchQuery}
+                refreshKey={refreshKey}
+              />
+            ))}
         </div>
       </main>
     </div>
