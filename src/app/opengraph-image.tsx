@@ -83,7 +83,7 @@ export default function Image() {
             marginTop: "52px",
           }}
         >
-          {["HackerNews", "Dev.to", "요즘IT", "토스", "카카오"].map((name) => (
+          {["긱뉴스", "요즘IT", "조쉬의 뉴스레터", "카카오테크"].map((name) => (
             <div
               key={name}
               style={{
