@@ -27,6 +27,16 @@ export function formatRelativeTime(dateStr: string | null, fallback = ""): strin
   return `${Math.floor(days / 365)}년 전`;
 }
 
+export function formatDate(dateStr: string | null): string {
+  if (!dateStr) return "";
+  const d = new Date(dateStr);
+  if (Number.isNaN(d.getTime())) return "";
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}.${m}.${day}`;
+}
+
 export function extractErrorMessage(err: unknown, fallback: string): string {
   if (axios.isAxiosError(err)) {
     return err.response?.data?.error?.message || fallback;

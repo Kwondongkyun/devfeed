@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Check, ExternalLink } from "lucide-react";
 
-import { cn, formatRelativeTime, isSafeUrl } from "@/lib/utils";
+import { cn, formatDate, isSafeUrl } from "@/lib/utils";
 import { SourceBadge } from "@/components/feed/SourceBadge";
 import { useAuth } from "@/features/auth/AuthContext";
 import { markArticleReadApi } from "@/features/feed/articles/api";
@@ -71,7 +71,7 @@ export function ArticleCard({ article, layout = "card", onRead }: ArticleCardPro
           <div className="flex items-center gap-2">
             <SourceBadge name={article.source.name} type={article.source.type} />
             <span className="font-mono text-[10px] text-muted-foreground">
-              {formatRelativeTime(article.published_at)}
+              {formatDate(article.published_at)}
             </span>
             {article.is_read && (
               <span className="font-mono text-[9px] text-muted-foreground">읽음</span>
@@ -136,7 +136,7 @@ export function ArticleCard({ article, layout = "card", onRead }: ArticleCardPro
         <div className="flex items-center gap-2">
           <SourceBadge name={article.source.name} type={article.source.type} />
           <span className="font-mono text-[10px] text-muted-foreground">
-            {formatRelativeTime(article.published_at)}
+            {formatDate(article.published_at)}
           </span>
         </div>
         <p className="line-clamp-2 font-mono text-[13px] font-semibold leading-snug text-foreground">

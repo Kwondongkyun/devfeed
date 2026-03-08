@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import Parser from "rss-parser";
+import * as cheerio from "cheerio";
 import { db } from "@/lib/db/supabase";
 import { ok, err } from "@/lib/api/response";
 
@@ -113,6 +114,119 @@ async function fetchDevto(source: { id: string; category: string }): Promise<Art
   }
 }
 
+// ── Maily (조쉬의 뉴스레터) Fetcher ─────────────────────
+async function fetchMaily(source: { id: string; url: string; category: string }): Promise<ArticleData[]> {
+  try {
+    const articles: ArticleData[] = [];
+
+    for (let page = 1; page <= 2; page++) {
+      const res = await fetch(`${source.url}?page=${page}`, {
+        headers: { "User-Agent": "DevFeed/1.0 RSS Reader" },
+      });
+      const html = await res.text();
+      const $ = cheerio.load(html);
+
+      const postLinks = $(`a[href*="/posts/"]`).filter((_, el) => {
+        const href = $(el).attr("href") || "";
+        return /\/posts\/[a-z0-9]+$/i.test(href);
+      });
+
+      if (postLinks.length === 0) break;
+
+      postLinks.each((_, el) => {
+        const $el = $(el);
+        const href = $el.attr("href") || "";
+        const url = href.startsWith("http") ? href : `https://maily.so${href}`;
+        const parts = $el.text().trim().split("\n").map((s) => s.trim()).filter(Boolean);
+        const title = parts.length >= 2 ? parts[1] : parts[0] || "";
+
+        if (title && url) {
+          articles.push({
+            title: title.slice(0, 200),
+            url,
+            author: "조쉬",
+            category: source.category,
+            published_at: new Date().toISOString(),
+            source_id: source.id,
+          });
+        }
+      });
+    }
+
+    // 개별 페이지에서 날짜 추출 (상위 20개만)
+    for (const a of articles.slice(0, 20)) {
+      try {
+        const res = await fetch(a.url, { headers: { "User-Agent": "DevFeed/1.0 RSS Reader" } });
+        const html = await res.text();
+        const dateMatch = html.match(/(\d{4})\.(\d{2})\.(\d{2})/);
+        if (dateMatch) {
+          a.published_at = new Date(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`).toISOString();
+        }
+      } catch {
+        // keep default date
+      }
+    }
+
+    return articles;
+  } catch (e) {
+    console.error(`[fetchMaily] ${source.url}:`, e);
+    return [];
+  }
+}
+
+// ── eo planet Fetcher (sitemap) ─────────────────────────
+async function fetchEoPlanet(source: { id: string; url: string; category: string }): Promise<ArticleData[]> {
+  try {
+    const sitemapRes = await fetch(`${source.url}/sitemap.xml`, {
+      headers: { "User-Agent": "DevFeed/1.0 RSS Reader" },
+    });
+    const sitemapXml = await sitemapRes.text();
+    const $ = cheerio.load(sitemapXml, { xmlMode: true });
+
+    const urls: { url: string; lastmod: string }[] = [];
+    $("url").each((_, el) => {
+      const loc = $(el).find("loc").text();
+      const lastmod = $(el).find("lastmod").text();
+      if (loc.includes("/magazines/")) {
+        urls.push({ url: loc, lastmod });
+      }
+    });
+
+    urls.sort((a, b) => new Date(b.lastmod).getTime() - new Date(a.lastmod).getTime());
+    const top30 = urls.slice(0, 30);
+
+    const results = await Promise.allSettled(
+      top30.map(async ({ url, lastmod }) => {
+        const res = await fetch(url, { headers: { "User-Agent": "DevFeed/1.0 RSS Reader" } });
+        const html = await res.text();
+        const page = cheerio.load(html);
+        const title = page(".main-title").text().trim() || page("h1").text().trim();
+
+        // 개별 페이지에서 실제 발행일 추출 (YYYY. MM. DD 형식)
+        const dateMatch = html.match(/(\d{4})\.\s*(\d{2})\.\s*(\d{2})/);
+        const publishedAt = dateMatch
+          ? new Date(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`).toISOString()
+          : new Date(lastmod).toISOString();
+
+        return {
+          title: title || "Untitled",
+          url,
+          category: source.category,
+          published_at: publishedAt,
+          source_id: source.id,
+        };
+      }),
+    );
+
+    return results
+      .filter((r): r is PromiseFulfilledResult<ArticleData> => r.status === "fulfilled")
+      .map((r) => r.value);
+  } catch (e) {
+    console.error(`[fetchEoPlanet] ${source.url}:`, e);
+    return [];
+  }
+}
+
 // ── Main Handler ─────────────────────────────────────────
 export async function POST(req: NextRequest) {
   const cronSecret = process.env.CRON_SECRET;
@@ -135,6 +249,8 @@ export async function POST(req: NextRequest) {
     sources.map((s) => {
       if (s.type === "hackernews") return fetchHackerNews(s);
       if (s.type === "devto") return fetchDevto(s);
+      if (s.type === "maily") return fetchMaily(s);
+      if (s.type === "eopla") return fetchEoPlanet(s);
       return fetchRss(s);
     }),
   );
