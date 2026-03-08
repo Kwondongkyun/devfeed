@@ -219,8 +219,8 @@ async function fetchEoPlanet(source: { id: string; url: string; category: string
     );
 
     return results
-      .filter((r): r is PromiseFulfilledResult<ArticleData> => r.status === "fulfilled")
-      .map((r) => r.value);
+      .filter((r) => r.status === "fulfilled")
+      .map((r) => (r as PromiseFulfilledResult<ArticleData>).value);
   } catch (e) {
     console.error(`[fetchEoPlanet] ${source.url}:`, e);
     return [];
