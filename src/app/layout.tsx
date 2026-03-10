@@ -5,7 +5,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import { AuthProvider } from "@/features/auth/AuthContext";
 import { ThemeProvider } from "@/lib/providers/theme-provider";
-import { Analytics } from "@vercel/analytics/react";
+
 
 const GA_ID = "G-CBYZ2D50VB";
 
@@ -59,7 +59,6 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>
           <Toaster position="top-right" richColors closeButton />
-          <Analytics />
         </ThemeProvider>
       </body>
     </html>
