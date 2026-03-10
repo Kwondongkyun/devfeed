@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Oswald, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { AuthProvider } from "@/features/auth/AuthContext";
 import { ThemeProvider } from "@/lib/providers/theme-provider";
+import { Analytics } from "@vercel/analytics/react";
+
+const GA_ID = "G-CBYZ2D50VB";
 
 const oswald = Oswald({
   variable: "--font-oswald",
@@ -43,12 +47,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
+      <head>
+        <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
+        </Script>
+      </head>
       <body
         className={`${oswald.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>
           <Toaster position="top-right" richColors closeButton />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
