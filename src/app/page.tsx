@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Star } from "lucide-react";
 
@@ -8,7 +8,12 @@ import { Header } from "@/components/common/Header";
 import { SearchBar } from "@/components/feed/SearchBar";
 import { CategoryRow } from "@/components/feed/CategoryRow";
 import { useAuth } from "@/features/auth/AuthContext";
-import { listFavoriteSourcesApi } from "@/features/auth/api";
+import {
+  addBookmarkApi,
+  listBookmarksApi,
+  listFavoriteSourcesApi,
+  removeBookmarkApi,
+} from "@/features/auth/api";
 import { listSourcesApi } from "@/features/feed/sources/api";
 import {
   CATEGORY_ORDER,
@@ -30,8 +35,11 @@ export default function Home() {
   const [favoriteSourceIds, setFavoriteSourceIds] = useState<Set<string>>(
     new Set(),
   );
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<number>>(new Set());
   const [searchQuery, setSearchQuery] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
+  const bookmarkedIdsRef = useRef(bookmarkedIds);
+  bookmarkedIdsRef.current = bookmarkedIds;
 
   useEffect(() => {
     listSourcesApi()
@@ -44,14 +52,44 @@ export default function Home() {
   useEffect(() => {
     if (!user) {
       setFavoriteSourceIds(new Set());
+      setBookmarkedIds(new Set());
       return;
     }
-    listFavoriteSourcesApi()
-      .then((ids) => setFavoriteSourceIds(new Set(ids)))
+    Promise.all([listFavoriteSourcesApi(), listBookmarksApi()])
+      .then(([favIds, bmIds]) => {
+        setFavoriteSourceIds(new Set(favIds));
+        setBookmarkedIds(new Set(bmIds));
+      })
       .catch(() => {
         // Error handled by axios interceptor
       });
   }, [user]);
+
+  const handleBookmarkToggle = useCallback(async (articleId: number) => {
+    const isBookmarked = bookmarkedIdsRef.current.has(articleId);
+
+    setBookmarkedIds((prev) => {
+      const next = new Set(prev);
+      if (isBookmarked) next.delete(articleId);
+      else next.add(articleId);
+      return next;
+    });
+
+    try {
+      if (isBookmarked) {
+        await removeBookmarkApi(articleId);
+      } else {
+        await addBookmarkApi(articleId);
+      }
+    } catch {
+      setBookmarkedIds((prev) => {
+        const next = new Set(prev);
+        if (isBookmarked) next.add(articleId);
+        else next.delete(articleId);
+        return next;
+      });
+    }
+  }, []);
 
 
   const categorySourceIds = useMemo(() => {
@@ -135,6 +173,8 @@ export default function Home() {
                 sourceIds={sourceIds}
                 searchQuery={searchQuery}
                 refreshKey={refreshKey}
+                bookmarkedIds={bookmarkedIds}
+                onBookmarkToggle={user ? handleBookmarkToggle : undefined}
               />
             ))}
         </div>

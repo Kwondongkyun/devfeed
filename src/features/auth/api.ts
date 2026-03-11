@@ -2,6 +2,7 @@ import { api } from "@/lib/api/axios";
 
 import type {
   AuthResponse,
+  BookmarksResponse,
   FavoriteSourcesResponse,
   LoginRequest,
   MeResponse,
@@ -51,4 +52,19 @@ export async function removeFavoriteSourceApi(
   sourceId: string,
 ): Promise<void> {
   await api.delete(`/api/v1/auth/favorites/sources/${sourceId}`);
+}
+
+export async function listBookmarksApi(): Promise<number[]> {
+  const response = await api.get<BookmarksResponse>(
+    "/api/v1/auth/bookmarks",
+  );
+  return response.data.result;
+}
+
+export async function addBookmarkApi(articleId: number): Promise<void> {
+  await api.post(`/api/v1/auth/bookmarks/${articleId}`);
+}
+
+export async function removeBookmarkApi(articleId: number): Promise<void> {
+  await api.delete(`/api/v1/auth/bookmarks/${articleId}`);
 }

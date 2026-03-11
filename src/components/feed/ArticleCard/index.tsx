@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Check, ExternalLink } from "lucide-react";
+import { Bookmark, Check, ExternalLink } from "lucide-react";
 
 import { cn, formatDate, isSafeUrl } from "@/lib/utils";
 import { SourceBadge } from "@/components/feed/SourceBadge";
@@ -15,9 +15,11 @@ interface ArticleCardProps {
   article: ArticleItem;
   layout?: "card" | "row";
   onRead?: (articleId: number, isRead: boolean) => void;
+  isBookmarked?: boolean;
+  onBookmarkToggle?: (articleId: number) => void;
 }
 
-export function ArticleCard({ article, layout = "card", onRead }: ArticleCardProps) {
+export function ArticleCard({ article, layout = "card", onRead, isBookmarked, onBookmarkToggle }: ArticleCardProps) {
   const { user } = useAuth();
   const [imageError, setImageError] = useState(false);
 
@@ -87,6 +89,23 @@ export function ArticleCard({ article, layout = "card", onRead }: ArticleCardPro
           )}
         </div>
 
+        {user && onBookmarkToggle && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onBookmarkToggle(article.id);
+            }}
+            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-elevated"
+          >
+            <Bookmark
+              className={cn(
+                "h-4 w-4 transition-colors",
+                isBookmarked ? "fill-orange text-orange" : "fill-none text-muted-foreground",
+              )}
+            />
+          </button>
+        )}
         {article.is_read ? (
           <div className="shrink-0 rounded-full bg-teal p-1">
             <Check className="h-3 w-3 text-text-dark" strokeWidth={3} />
@@ -130,6 +149,23 @@ export function ArticleCard({ article, layout = "card", onRead }: ArticleCardPro
           <div className="absolute right-2 top-2 rounded-full bg-teal p-1">
             <Check className="h-3 w-3 text-text-dark" strokeWidth={3} />
           </div>
+        )}
+        {user && onBookmarkToggle && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onBookmarkToggle(article.id);
+            }}
+            className="absolute left-2 top-2 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-background/70 backdrop-blur-sm transition-colors hover:bg-background/90"
+          >
+            <Bookmark
+              className={cn(
+                "h-3.5 w-3.5 transition-colors",
+                isBookmarked ? "fill-orange text-orange" : "fill-none text-foreground",
+              )}
+            />
+          </button>
         )}
       </div>
       <div className="flex flex-1 flex-col gap-2.5 p-4">

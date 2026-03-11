@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { LogIn, LogOut, Moon, Sun } from "lucide-react";
+import { Bookmark, LogIn, LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { useAuth } from "@/features/auth/AuthContext";
@@ -34,6 +34,13 @@ export function Header() {
             <>
               {user ? (
                 <div className="flex items-center gap-3">
+                  <Link
+                    href="/mypage?tab=bookmarks"
+                    className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[16px] text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground"
+                    aria-label="저장한 글"
+                  >
+                    <Bookmark className="h-[18px] w-[18px]" />
+                  </Link>
                   <Link
                     href="/mypage"
                     className="cursor-pointer font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"

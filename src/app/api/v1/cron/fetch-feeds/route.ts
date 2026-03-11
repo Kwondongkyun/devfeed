@@ -142,19 +142,19 @@ export async function POST(req: NextRequest) {
       }),
     );
 
-    // Build per-source results for monitoring
-    const sourceResults = sources.map((s, i) => {
-      const result = fetchResults[i];
-      const fetched = result.status === "fulfilled" ? result.value.length : 0;
-      return { source_id: s.id, name: s.name, fetched, status: fetched > 0 ? "ok" : "empty" };
-    });
-
     const allArticles: ArticleData[] = fetchResults.flatMap((r) =>
       r.status === "fulfilled" ? r.value : [],
     );
 
     const totalFetched = allArticles.length;
     if (totalFetched === 0) {
+      const sourceResults = sources.map((s) => ({
+        source_id: s.id, name: s.name, fetched: 0, inserted: 0, status: "empty" as const,
+      }));
+      await db.from("cron_log").insert({
+        status: "success", total_fetched: 0, inserted: 0, duplicates_skipped: 0,
+        notifications_created: 0, duration_ms: Date.now() - startTime, source_results: sourceResults,
+      });
       return ok({ success: true, inserted: 0, total_fetched: 0, duplicates_skipped: 0, timestamp: new Date().toISOString() });
     }
 
@@ -169,6 +169,18 @@ export async function POST(req: NextRequest) {
     }
 
     const newArticles = allArticles.filter((a) => !existingUrls.has(a.url));
+
+    // Build per-source results with actual new article counts
+    const newCountBySource = new Map<string, number>();
+    for (const a of newArticles) {
+      newCountBySource.set(a.source_id, (newCountBySource.get(a.source_id) ?? 0) + 1);
+    }
+    const sourceResults = sources.map((s, i) => {
+      const result = fetchResults[i];
+      const fetched = result.status === "fulfilled" ? result.value.length : 0;
+      const insertedCount = newCountBySource.get(s.id) ?? 0;
+      return { source_id: s.id, name: s.name, fetched, inserted: insertedCount, status: insertedCount > 0 ? "ok" : "empty" };
+    });
     const duplicatesSkipped = totalFetched - newArticles.length;
 
     // Bulk insert in chunks of 100

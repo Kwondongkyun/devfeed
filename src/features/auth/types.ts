@@ -26,3 +26,4 @@ export interface LoginRequest {
 export type AuthResponse = BaseResponse<TokenResponse>;
 export type MeResponse = BaseResponse<User>;
 export type FavoriteSourcesResponse = BaseResponse<string[]>;
+export type BookmarksResponse = BaseResponse<number[]>;

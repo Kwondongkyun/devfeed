@@ -10,6 +10,12 @@ import { SortToggle } from "@/components/common/SortToggle";
 import { ArticleCard } from "@/components/feed/ArticleCard";
 import { ArticleCardSkeleton } from "@/components/feed/ArticleCardSkeleton";
 import { SourceFilterChips } from "@/components/feed/SourceFilterChips";
+import { useAuth } from "@/features/auth/AuthContext";
+import {
+  addBookmarkApi,
+  listBookmarksApi,
+  removeBookmarkApi,
+} from "@/features/auth/api";
 import { listArticlesApi } from "@/features/feed/articles/api";
 import { listSourcesApi } from "@/features/feed/sources/api";
 import {
@@ -42,10 +48,14 @@ const SORT_OPTIONS: { key: SortKey; label: string }[] = [
 export default function CategoryPage() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const { user } = useAuth();
   const slug = params.slug as string;
   const category = slugToCategory(slug);
 
   const [sources, setSources] = useState<SourceItem[]>([]);
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<number>>(new Set());
+  const bookmarkedIdsRef = useRef(bookmarkedIds);
+  bookmarkedIdsRef.current = bookmarkedIds;
   const [articles, setArticles] = useState<ArticleItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -78,6 +88,37 @@ export default function CategoryPage() {
       .catch(() => {
         // Error handled by axios interceptor
       });
+  }, []);
+
+  useEffect(() => {
+    if (!user) {
+      setBookmarkedIds(new Set());
+      return;
+    }
+    listBookmarksApi()
+      .then((ids) => setBookmarkedIds(new Set(ids)))
+      .catch(() => {});
+  }, [user]);
+
+  const handleBookmarkToggle = useCallback(async (articleId: number) => {
+    const isBookmarked = bookmarkedIdsRef.current.has(articleId);
+    setBookmarkedIds((prev) => {
+      const next = new Set(prev);
+      if (isBookmarked) next.delete(articleId);
+      else next.add(articleId);
+      return next;
+    });
+    try {
+      if (isBookmarked) await removeBookmarkApi(articleId);
+      else await addBookmarkApi(articleId);
+    } catch {
+      setBookmarkedIds((prev) => {
+        const next = new Set(prev);
+        if (isBookmarked) next.add(articleId);
+        else next.delete(articleId);
+        return next;
+      });
+    }
   }, []);
 
   const fetchArticles = useCallback(
@@ -234,7 +275,14 @@ export default function CategoryPage() {
           <>
             <div className="flex flex-col gap-[1px] overflow-hidden rounded-[16px]">
               {displayArticles.map((article) => (
-                <ArticleCard key={article.id} article={article} layout="row" onRead={handleArticleRead} />
+                <ArticleCard
+                  key={article.id}
+                  article={article}
+                  layout="row"
+                  onRead={handleArticleRead}
+                  isBookmarked={bookmarkedIds.has(article.id)}
+                  onBookmarkToggle={user ? handleBookmarkToggle : undefined}
+                />
               ))}
             </div>
             <div ref={observerRef} className="flex justify-center py-8">

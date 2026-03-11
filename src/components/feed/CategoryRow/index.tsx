@@ -29,9 +29,11 @@ interface CategoryRowProps {
   searchQuery?: string;
   hideMoreLink?: boolean;
   refreshKey?: number;
+  bookmarkedIds?: Set<number>;
+  onBookmarkToggle?: (articleId: number) => void;
 }
 
-export function CategoryRow({ category, sourceIds, searchQuery, hideMoreLink, refreshKey }: CategoryRowProps) {
+export function CategoryRow({ category, sourceIds, searchQuery, hideMoreLink, refreshKey, bookmarkedIds, onBookmarkToggle }: CategoryRowProps) {
   const [articles, setArticles] = useState<ArticleItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
@@ -199,7 +201,12 @@ export function CategoryRow({ category, sourceIds, searchQuery, hideMoreLink, re
               key={article.id}
               className="w-72 shrink-0 snap-start sm:w-80"
             >
-              <ArticleCard article={article} onRead={handleArticleRead} />
+              <ArticleCard
+                article={article}
+                onRead={handleArticleRead}
+                isBookmarked={bookmarkedIds?.has(article.id)}
+                onBookmarkToggle={onBookmarkToggle}
+              />
             </div>
           ))}
         </div>
