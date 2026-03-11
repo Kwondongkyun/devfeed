@@ -2,8 +2,8 @@ name: Cron - Fetch Feeds
 
 on:
   schedule:
-    # 매일 KST 18시 (UTC 09시) 실행
-    - cron: "0 9 * * *"
+    # 매일 KST 08시 (UTC 23시, 전날) 실행
+    - cron: "0 23 * * *"
   workflow_dispatch: # 수동 트리거 지원
 
 jobs:
