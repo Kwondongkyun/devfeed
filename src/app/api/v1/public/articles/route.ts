@@ -71,5 +71,19 @@ export async function GET(req: NextRequest) {
 
   const nextCursor = hasMore ? items[items.length - 1]?.id ?? null : null;
 
-  return ok({ articles: result, next_cursor: nextCursor, has_more: hasMore });
+  // 전체 건수 조회
+  let countQuery = db.from("article").select("*", { count: "exact", head: true });
+  if (category) {
+    const { data: catSources } = await db.from("source").select("id").eq("category", category).eq("is_active", true);
+    const catSourceIds = (catSources ?? []).map((s) => s.id);
+    if (catSourceIds.length > 0) countQuery = countQuery.in("source_id", catSourceIds);
+  } else if (source) {
+    countQuery = countQuery.in("source_id", source.split(",").filter(Boolean));
+  }
+  if (search) {
+    countQuery = countQuery.or(`title.ilike.%${search}%,summary.ilike.%${search}%`);
+  }
+  const { count: totalCount } = await countQuery;
+
+  return ok({ total: totalCount ?? 0, articles: result, next_cursor: nextCursor, has_more: hasMore });
 }
