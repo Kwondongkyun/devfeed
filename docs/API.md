@@ -15,7 +15,7 @@ https://www.devfeed.kr/api/v1/public
 모든 요청에 `x-api-key` 헤더가 필요합니다.
 
 ```
-x-api-key: YOUR_API_KEY
+x-api-key: 079d8a78ebfd5a907a899b6a60879908eb50aed02b87658a599c8b9b52815a58
 ```
 
 ## Endpoints
@@ -130,21 +130,21 @@ GET /api/v1/public/articles
 ### 최신 아티클 조회
 
 ```bash
-curl -H "x-api-key: YOUR_API_KEY" \
+curl -H "x-api-key: 079d8a78ebfd5a907a899b6a60879908eb50aed02b87658a599c8b9b52815a58" \
   "https://www.devfeed.kr/api/v1/public/articles"
 ```
 
 ### 카테고리 필터
 
 ```bash
-curl -H "x-api-key: YOUR_API_KEY" \
+curl -H "x-api-key: 079d8a78ebfd5a907a899b6a60879908eb50aed02b87658a599c8b9b52815a58" \
   "https://www.devfeed.kr/api/v1/public/articles?category=AI%20기업%20블로그&limit=5"
 ```
 
 ### 검색
 
 ```bash
-curl -H "x-api-key: YOUR_API_KEY" \
+curl -H "x-api-key: 079d8a78ebfd5a907a899b6a60879908eb50aed02b87658a599c8b9b52815a58" \
   "https://www.devfeed.kr/api/v1/public/articles?search=React&limit=10"
 ```
 
@@ -152,10 +152,10 @@ curl -H "x-api-key: YOUR_API_KEY" \
 
 ```bash
 # 1페이지
-curl -H "x-api-key: YOUR_API_KEY" \
+curl -H "x-api-key: 079d8a78ebfd5a907a899b6a60879908eb50aed02b87658a599c8b9b52815a58" \
   "https://www.devfeed.kr/api/v1/public/articles?limit=20"
 
 # 2페이지 (이전 응답의 next_cursor 사용)
-curl -H "x-api-key: YOUR_API_KEY" \
+curl -H "x-api-key: 079d8a78ebfd5a907a899b6a60879908eb50aed02b87658a599c8b9b52815a58" \
   "https://www.devfeed.kr/api/v1/public/articles?limit=20&cursor=2312"
 ```
