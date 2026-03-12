@@ -19,11 +19,31 @@ interface ArticleData {
   source_id: string;
 }
 
+// ── og:image Fallback ────────────────────────────────────
+async function fetchOgImage(url: string): Promise<string | undefined> {
+  try {
+    const res = await fetch(url, {
+      headers: { "User-Agent": "DevFeed/1.0 Bot" },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return undefined;
+    // head 태그까지만 읽으면 충분하므로 앞부분만 파싱
+    const html = await res.text();
+    const headEnd = html.indexOf("</head>");
+    const head = headEnd > -1 ? html.slice(0, headEnd) : html.slice(0, 10000);
+    const match = head.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
+      || head.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+    return match?.[1] || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 // ── RSS Fetcher ──────────────────────────────────────────
 async function fetchRss(source: { id: string; url: string; category: string }): Promise<ArticleData[]> {
   try {
     const feed = await rssParser.parseURL(source.url);
-    return feed.items.slice(0, 30).map((item: any) => {
+    const articles = feed.items.slice(0, 30).map((item: any) => {
       const rawSummary = item.contentSnippet || item.summary || item.content || "";
       const summary = rawSummary.replace(/<[^>]+>/g, "").slice(0, 300) || undefined;
 
@@ -49,6 +69,22 @@ async function fetchRss(source: { id: string; url: string; category: string }): 
         source_id: source.id,
       };
     }).filter((a) => a.url);
+
+    // RSS에서 이미지 못 가져온 아티클 → og:image fallback
+    const noImageArticles = articles.filter((a) => !a.image_url);
+    if (noImageArticles.length > 0) {
+      const ogResults = await Promise.allSettled(
+        noImageArticles.map((a) => fetchOgImage(a.url)),
+      );
+      noImageArticles.forEach((a, i) => {
+        const result = ogResults[i];
+        if (result.status === "fulfilled" && result.value) {
+          a.image_url = result.value;
+        }
+      });
+    }
+
+    return articles;
   } catch (e) {
     console.error(`[fetchRss] ${source.url}:`, e);
     return [];
