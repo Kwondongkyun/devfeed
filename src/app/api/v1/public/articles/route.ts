@@ -3,6 +3,16 @@ import { db } from "@/lib/db/supabase";
 import { ok, err } from "@/lib/api/response";
 
 export async function GET(req: NextRequest) {
+  // DEBUG: 런타임 환경변수 존재 여부 확인
+  const envCheck = {
+    PUBLIC_API_KEY: !!process.env.PUBLIC_API_KEY,
+    SUPABASE_URL: !!process.env.SUPABASE_URL,
+    CRON_SECRET: !!process.env.CRON_SECRET,
+  };
+  if (req.headers.get("x-debug") === "env") {
+    return ok(envCheck);
+  }
+
   // API 키 검증
   const apiKey = req.headers.get("x-api-key");
   const envKey = process.env.PUBLIC_API_KEY;
