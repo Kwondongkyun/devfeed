@@ -19,7 +19,13 @@ interface ArticleCardProps {
   onBookmarkToggle?: (articleId: number) => void;
 }
 
-export function ArticleCard({ article, layout = "card", onRead, isBookmarked, onBookmarkToggle }: ArticleCardProps) {
+export function ArticleCard({
+  article,
+  layout = "card",
+  onRead,
+  isBookmarked,
+  onBookmarkToggle,
+}: ArticleCardProps) {
   const { user } = useAuth();
   const [imageError, setImageError] = useState(false);
 
@@ -71,12 +77,17 @@ export function ArticleCard({ article, layout = "card", onRead, isBookmarked, on
 
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <div className="flex items-center gap-2">
-            <SourceBadge name={article.source.name} type={article.source.type} />
+            <SourceBadge
+              name={article.source.name}
+              type={article.source.type}
+            />
             <span className="font-mono text-[10px] text-muted-foreground">
               {formatDate(article.published_at)}
             </span>
             {article.is_read && (
-              <span className="font-mono text-[9px] text-muted-foreground">읽음</span>
+              <span className="font-mono text-[9px] text-muted-foreground">
+                읽음
+              </span>
             )}
           </div>
           <p className="line-clamp-1 font-mono text-[13px] font-semibold text-foreground">
@@ -101,7 +112,9 @@ export function ArticleCard({ article, layout = "card", onRead, isBookmarked, on
             <Bookmark
               className={cn(
                 "h-4 w-4 transition-colors",
-                isBookmarked ? "fill-orange text-orange" : "fill-none text-muted-foreground",
+                isBookmarked
+                  ? "fill-orange text-orange"
+                  : "fill-none text-muted-foreground",
               )}
             />
           </button>
@@ -162,7 +175,9 @@ export function ArticleCard({ article, layout = "card", onRead, isBookmarked, on
             <Bookmark
               className={cn(
                 "h-3.5 w-3.5 transition-colors",
-                isBookmarked ? "fill-orange text-orange" : "fill-none text-foreground",
+                isBookmarked
+                  ? "fill-orange text-orange"
+                  : "fill-none text-foreground",
               )}
             />
           </button>
@@ -175,11 +190,11 @@ export function ArticleCard({ article, layout = "card", onRead, isBookmarked, on
             {formatDate(article.published_at)}
           </span>
         </div>
-        <p className="line-clamp-2 font-mono text-[13px] font-semibold leading-snug text-foreground">
+        <p className="line-clamp-2 font-mono text-base font-semibold leading-snug text-foreground">
           {article.title}
         </p>
         {article.summary && (
-          <p className="line-clamp-3 font-mono text-[11px] leading-relaxed text-muted-foreground">
+          <p className="line-clamp-2 font-mono text-[11px] leading-relaxed text-muted-foreground">
             {article.summary}
           </p>
         )}

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, Newspaper, Code, Brain, Globe, Loader } from "lucide-react";
+import { toast } from "sonner";
 
 import { Header } from "@/components/common/Header";
 import { SortToggle } from "@/components/common/SortToggle";
@@ -242,11 +243,18 @@ export default function CategoryPage() {
             <h1 className="font-sans text-2xl font-bold uppercase tracking-wide">
               {displayName}
             </h1>
-            <span className="rounded-full bg-elevated px-3 py-1 font-mono text-xs text-muted-foreground">
-              {articles.length}개의 글
-            </span>
           </div>
-          <SortToggle options={SORT_OPTIONS} value={sortKey} onChange={setSortKey} />
+          <SortToggle
+            options={SORT_OPTIONS}
+            value={sortKey}
+            onChange={(key) => {
+              if (key === "unread" && !user) {
+                toast.info("로그인 후 이용할 수 있습니다");
+                return;
+              }
+              setSortKey(key);
+            }}
+          />
         </div>
 
         {categorySources.length > 1 && (

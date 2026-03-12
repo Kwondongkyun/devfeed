@@ -91,7 +91,6 @@ export default function Home() {
     }
   }, []);
 
-
   const categorySourceIds = useMemo(() => {
     return CATEGORY_ORDER.map((category) => ({
       category,
@@ -120,9 +119,7 @@ export default function Home() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Star className="h-5 w-5 text-orange" />
-                  <h2 className="font-sans text-xl font-semibold">
-                    즐겨찾기
-                  </h2>
+                  <h2 className="font-sans text-xl font-semibold">즐겨찾기</h2>
                 </div>
                 {favoriteSourceIds.size > 0 && (
                   <Link
@@ -137,7 +134,10 @@ export default function Home() {
                 <div className="flex items-center justify-center rounded-[16px] bg-card py-8">
                   <p className="font-mono text-xs text-muted-foreground">
                     즐겨찾기한 소스가 없습니다.{" "}
-                    <Link href="/mypage" className="cursor-pointer text-orange underline-offset-2 hover:underline">
+                    <Link
+                      href="/mypage"
+                      className="cursor-pointer text-orange underline-offset-2 hover:underline"
+                    >
                       소스를 추가해보세요!
                     </Link>
                   </p>
@@ -165,7 +165,9 @@ export default function Home() {
             </section>
           )}
           {categorySourceIds
-            .filter(({ sourceIds }) => sources.length === 0 || sourceIds.length > 0)
+            .filter(
+              ({ sourceIds }) => sources.length === 0 || sourceIds.length > 0,
+            )
             .map(({ category, sourceIds }) => (
               <CategoryRow
                 key={category}

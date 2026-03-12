@@ -33,18 +33,29 @@ interface CategoryRowProps {
   onBookmarkToggle?: (articleId: number) => void;
 }
 
-export function CategoryRow({ category, sourceIds, searchQuery, hideMoreLink, refreshKey, bookmarkedIds, onBookmarkToggle }: CategoryRowProps) {
+export function CategoryRow({
+  category,
+  sourceIds,
+  searchQuery,
+  hideMoreLink,
+  refreshKey,
+  bookmarkedIds,
+  onBookmarkToggle,
+}: CategoryRowProps) {
   const [articles, setArticles] = useState<ArticleItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
-  const handleArticleRead = useCallback((articleId: number, isRead: boolean) => {
-    setArticles((prev) =>
-      prev.map((a) => (a.id === articleId ? { ...a, is_read: isRead } : a)),
-    );
-  }, []);
+  const handleArticleRead = useCallback(
+    (articleId: number, isRead: boolean) => {
+      setArticles((prev) =>
+        prev.map((a) => (a.id === articleId ? { ...a, is_read: isRead } : a)),
+      );
+    },
+    [],
+  );
 
   // Intersection Observer for lazy loading
   useEffect(() => {
@@ -101,7 +112,10 @@ export function CategoryRow({ category, sourceIds, searchQuery, hideMoreLink, re
   const scrollBy = (direction: "left" | "right") => {
     const el = scrollRef.current;
     if (!el) return;
-    el.scrollBy({ left: direction === "left" ? -320 : 320, behavior: "smooth" });
+    el.scrollBy({
+      left: direction === "left" ? -320 : 320,
+      behavior: "smooth",
+    });
   };
 
   const displayName = CATEGORY_DISPLAY_NAMES[category] || category;
@@ -155,9 +169,6 @@ export function CategoryRow({ category, sourceIds, searchQuery, hideMoreLink, re
           <h2 className="font-sans text-xl font-semibold uppercase tracking-wide">
             {displayName}
           </h2>
-          <span className="rounded-full bg-elevated px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground">
-            {articles.length}
-          </span>
         </div>
         {!hideMoreLink && (
           <Link
@@ -197,10 +208,7 @@ export function CategoryRow({ category, sourceIds, searchQuery, hideMoreLink, re
           className="scrollbar-hide flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2"
         >
           {articles.map((article) => (
-            <div
-              key={article.id}
-              className="w-72 shrink-0 snap-start sm:w-80"
-            >
+            <div key={article.id} className="w-72 shrink-0 snap-start sm:w-80">
               <ArticleCard
                 article={article}
                 onRead={handleArticleRead}
