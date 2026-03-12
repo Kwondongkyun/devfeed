@@ -45,8 +45,6 @@ GET /api/v1/public/articles
 - `개발자 커뮤니티`
 - `AI 기업 블로그`
 - `한국 테크 블로그`
-- `뉴스레터`
-- `스타트업`
 
 #### 응답
 
@@ -124,6 +122,34 @@ GET /api/v1/public/articles
 |-----------|------|
 | 401 | API 키가 없거나 유효하지 않음 |
 | 500 | 서버 에러 |
+
+## 페이지네이션
+
+이 API는 **커서 기반 페이지네이션**을 사용합니다. 한 번의 요청으로 전체 데이터를 반환하지 않으며, `limit` 단위로 나누어 조회합니다.
+
+### 동작 방식
+
+1. 첫 요청 시 `limit` 개수만큼 아티클이 반환됩니다 (기본 20개, 최대 100개).
+2. 응답의 `has_more`가 `true`이면 다음 페이지가 존재합니다.
+3. 응답의 `next_cursor` 값을 다음 요청의 `cursor` 파라미터로 전달하면 다음 페이지를 조회할 수 있습니다.
+4. `has_more`가 `false`이면 마지막 페이지입니다. `next_cursor`는 `null`이 됩니다.
+
+### 예시 흐름
+
+```
+1번째 요청: GET /articles?limit=20
+  → total: 1070, articles: [20개], next_cursor: 2312, has_more: true
+
+2번째 요청: GET /articles?limit=20&cursor=2312
+  → total: 1070, articles: [20개], next_cursor: 2290, has_more: true
+
+...반복...
+
+마지막 요청: GET /articles?limit=20&cursor=15
+  → total: 1070, articles: [10개], next_cursor: null, has_more: false
+```
+
+> **참고**: `total`은 필터/검색 조건에 맞는 전체 건수이며, `articles`는 현재 페이지의 결과만 포함합니다.
 
 ## 사용 예시
 

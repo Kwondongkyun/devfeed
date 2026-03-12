@@ -137,7 +137,7 @@ export function ArticleCard({
       rel="noopener noreferrer"
       onClick={handleClick}
       className={cn(
-        "group flex cursor-pointer flex-col overflow-hidden rounded-[16px] bg-card transition-all hover:ring-1 hover:ring-orange/30",
+        "group flex h-[280px] cursor-pointer flex-col overflow-hidden rounded-[16px] bg-card transition-all hover:ring-1 hover:ring-orange/30",
         article.is_read && "opacity-50",
       )}
     >
