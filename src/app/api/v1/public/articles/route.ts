@@ -5,8 +5,9 @@ import { ok, err } from "@/lib/api/response";
 export async function GET(req: NextRequest) {
   // API 키 검증
   const apiKey = req.headers.get("x-api-key");
-  if (!apiKey || apiKey !== process.env.PUBLIC_API_KEY) {
-    return err("Invalid API key", 401);
+  const envKey = process.env.PUBLIC_API_KEY;
+  if (!apiKey || !envKey || apiKey !== envKey) {
+    return err(`Invalid API key (env defined: ${!!envKey})`, 401);
   }
 
   const { searchParams } = req.nextUrl;
