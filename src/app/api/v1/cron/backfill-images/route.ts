@@ -30,12 +30,13 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // image_url이 null인 아티클 조회
+  // image_url이 null인 아티클 조회 (최대 50개씩 처리 — Amplify 30초 제한 대응)
   const { data: articles, error } = await db
     .from("article")
     .select("id, url")
     .is("image_url", null)
-    .order("id", { ascending: false });
+    .order("id", { ascending: false })
+    .limit(50);
 
   if (error) return err("Failed to fetch articles", 500);
   if (!articles?.length) return ok({ updated: 0, total: 0 });

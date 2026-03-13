@@ -31,3 +31,23 @@ jobs:
             echo "::error::Feed fetch failed with status $http_code"
             exit 1
           fi
+
+      - name: Backfill missing images
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "${SITE_URL}/api/v1/cron/backfill-images" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -H "Content-Type: application/json")
+
+          http_code=$(echo "$response" | tail -1)
+          body=$(echo "$response" | sed '$d')
+
+          echo "HTTP Status: $http_code"
+          echo "Response: $body"
+
+          if [ "$http_code" -ne 200 ]; then
+            echo "::warning::Image backfill failed with status $http_code (non-blocking)"
+          fi
