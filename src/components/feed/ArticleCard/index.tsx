@@ -52,17 +52,17 @@ export function ArticleCard({
         rel="noopener noreferrer"
         onClick={handleClick}
         className={cn(
-          "group flex cursor-pointer items-center gap-4 bg-card px-6 py-4 transition-colors hover:bg-elevated",
+          "group flex cursor-pointer items-center gap-3 bg-card px-3 py-3 transition-colors hover:bg-elevated sm:gap-4 sm:px-6 sm:py-4",
           article.is_read && "opacity-50",
         )}
       >
-        <div className="relative h-[72px] w-[120px] shrink-0 overflow-hidden rounded-[12px] bg-placeholder">
+        <div className="relative h-[56px] w-[80px] shrink-0 overflow-hidden rounded-[12px] bg-placeholder sm:h-[72px] sm:w-[120px]">
           {safeImageUrl && !imageError ? (
             <Image
               src={safeImageUrl}
               alt=""
               fill
-              sizes="120px"
+              sizes="(max-width: 640px) 80px, 120px"
               className="object-cover"
               onError={() => setImageError(true)}
             />
@@ -107,7 +107,7 @@ export function ArticleCard({
               e.stopPropagation();
               onBookmarkToggle(article.id);
             }}
-            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-elevated"
+            className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-elevated"
           >
             <Bookmark
               className={cn(
@@ -170,7 +170,7 @@ export function ArticleCard({
               e.stopPropagation();
               onBookmarkToggle(article.id);
             }}
-            className="absolute left-2 top-2 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-background/70 backdrop-blur-sm transition-colors hover:bg-background/90"
+            className="absolute left-2 top-2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-background/70 backdrop-blur-sm transition-colors hover:bg-background/90"
           >
             <Bookmark
               className={cn(

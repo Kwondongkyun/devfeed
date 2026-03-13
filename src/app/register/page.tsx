@@ -52,7 +52,7 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="w-full max-w-[480px] rounded-[16px] border border-border bg-card p-10">
+      <div className="w-full max-w-[480px] rounded-[16px] border border-border bg-card p-6 sm:p-10">
         <div className="mb-8 flex flex-col items-center gap-2">
           <h1 className="font-sans text-4xl font-bold text-orange">DEVFEED</h1>
           <p className="font-mono text-xs text-muted-foreground">

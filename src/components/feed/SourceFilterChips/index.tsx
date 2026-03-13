@@ -16,11 +16,11 @@ export function SourceFilterChips({
   onChange,
 }: SourceFilterChipsProps) {
   return (
-    <div className="mb-6 flex flex-wrap gap-2">
+    <div className="mb-6 flex flex-wrap gap-2.5">
       <button
         onClick={() => onChange(null)}
         className={cn(
-          "cursor-pointer rounded-[16px] px-4 py-2 font-mono text-[11px] font-semibold uppercase transition-colors",
+          "cursor-pointer rounded-[16px] px-3 py-2.5 font-mono text-[11px] font-semibold uppercase transition-colors sm:px-4",
           activeSourceId === null
             ? "bg-orange text-text-dark"
             : "border border-border bg-transparent text-muted-foreground hover:text-foreground",
@@ -35,7 +35,7 @@ export function SourceFilterChips({
             onChange(activeSourceId === source.id ? null : source.id)
           }
           className={cn(
-            "cursor-pointer rounded-[16px] px-4 py-2 font-mono text-[11px] font-semibold uppercase transition-colors",
+            "cursor-pointer rounded-[16px] px-3 py-2.5 font-mono text-[11px] font-semibold uppercase transition-colors sm:px-4",
             activeSourceId === source.id
               ? "bg-orange text-text-dark"
               : "border border-border bg-transparent text-muted-foreground hover:text-foreground",

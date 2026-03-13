@@ -126,7 +126,8 @@ export function NotificationBell() {
       </PopoverTrigger>
       <PopoverContent
         align="end"
-        className="w-80 p-0 sm:w-96"
+        className="w-[calc(100vw-2rem)] p-0 sm:w-96"
+        collisionPadding={16}
       >
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <h3 className="font-mono text-sm font-semibold">알림</h3>
@@ -172,7 +173,7 @@ export function NotificationBell() {
                   {notification.is_read && <div className="h-2 w-2" />}
                 </div>
                 <div className="min-w-0 grow">
-                  <p className="font-mono text-[10px] text-muted-foreground">
+                  <p className="truncate font-mono text-[10px] text-muted-foreground">
                     {notification.article.source?.name ?? "알 수 없음"}
                   </p>
                   <p

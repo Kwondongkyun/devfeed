@@ -232,15 +232,15 @@ export default function CategoryPage() {
           >
             <ChevronLeft className="h-5 w-5" />
           </Link>
-          <span className="font-sans text-2xl font-bold text-orange">DEVFEED</span>
-          <span className="font-mono text-sm text-muted-foreground">/</span>
+          <span className="hidden font-sans text-2xl font-bold text-orange sm:inline">DEVFEED</span>
+          <span className="hidden font-mono text-sm text-muted-foreground sm:inline">/</span>
           <span className="font-sans text-lg font-semibold uppercase">{displayName}</span>
         </div>
 
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <IconComponent className="h-6 w-6 text-teal" />
-            <h1 className="font-sans text-2xl font-bold uppercase tracking-wide">
+            <h1 className="font-sans text-xl font-bold uppercase tracking-wide sm:text-2xl">
               {displayName}
             </h1>
           </div>

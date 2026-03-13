@@ -37,7 +37,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
         <button
           type="button"
           onClick={handleClear}
-          className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground hover:text-foreground"
+          className="absolute right-1 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center text-muted-foreground hover:text-foreground"
         >
           <X className="h-4 w-4" />
         </button>

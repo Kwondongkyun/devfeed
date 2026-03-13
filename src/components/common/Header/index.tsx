@@ -29,11 +29,11 @@ export function Header() {
           </span>
         </Link>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {!loading && (
             <>
               {user ? (
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5 sm:gap-3">
                   <Link
                     href="/mypage?tab=bookmarks"
                     className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[16px] text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground"
@@ -43,16 +43,17 @@ export function Header() {
                   </Link>
                   <Link
                     href="/mypage"
-                    className="cursor-pointer font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
+                    className="hidden cursor-pointer font-mono text-xs text-muted-foreground transition-colors hover:text-foreground sm:block max-w-[80px] truncate"
                   >
                     {user.nickname}
                   </Link>
                   <button
                     onClick={logout}
-                    className="flex cursor-pointer items-center gap-1.5 rounded-[16px] px-3 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground"
+                    className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-[16px] font-mono text-xs text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground sm:h-auto sm:w-auto sm:gap-1.5 sm:px-3 sm:py-1.5"
+                    aria-label="로그아웃"
                   >
-                    <LogOut className="h-3.5 w-3.5" />
-                    로그아웃
+                    <LogOut className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+                    <span className="hidden sm:inline">로그아웃</span>
                   </button>
                   <NotificationBell />
                 </div>

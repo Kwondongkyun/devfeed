@@ -252,7 +252,7 @@ export default function MyPage() {
         {/* 내 소스 탭 */}
         {activeTab === "sources" && (
           <>
-            <div className="mb-6 flex items-end justify-between">
+            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <p className="font-mono text-xs text-muted-foreground">
                 즐겨찾는 소스를 관리해보세요
               </p>
